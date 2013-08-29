@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 24-08-2013
+# Date : 29-08-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -2165,7 +2165,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Nagios Plugins" \
 	  --gauge "Installation Nagios Plugins" 10 60 0 \
 
-
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
 	fi
@@ -2403,7 +2402,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation NDOutils" \
 	  --gauge "Installation NDOutils" 10 60 0 \
-
 
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
@@ -2761,6 +2759,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation NRPE" \
 	  --gauge "Installation NRPE" 10 60 0 \
 
+	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
+		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
+		groupadd nagcmd
+		usermod -G nagcmd,nagios nagios
+		usermod -G nagios,nagcmd www-data
+	fi
 
 	if [ -f $NrpePidFile ] ; then
 	/etc/init.d/nrpe stop &> /dev/null
@@ -3578,7 +3582,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Centreon" \
 	  --gauge "Installation Centreon" 10 60 0 \
-
 
 	if [ -f $Ndo2dbPidFile ] ; then
 	/etc/init.d/ndo2db stop &> /dev/null
