@@ -1253,9 +1253,13 @@ installation_composant_nagios_plugins()
  echo "XXX" ; echo "apt-get -y install libwrap0-dev"; echo "XXX"
 	apt-get -y install libwrap0-dev &> /dev/null
 
- echo "80" ; sleep 1
+ echo "70" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libmcrypt-dev"; echo "XXX"
 	apt-get -y install libmcrypt-dev &> /dev/null
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install dnsutils"; echo "XXX"
+	apt-get -y install dnsutils &> /dev/null
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
