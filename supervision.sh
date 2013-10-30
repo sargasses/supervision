@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 29-08-2013
+# Date : 30-10-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1378,6 +1378,10 @@ installation_composant_centreon_broker()
  echo "50" ; sleep 1
  echo "XXX" ; echo "apt-get -y install librrd-dev"; echo "XXX"
 	apt-get -y install librrd-dev &> /dev/null
+
+ echo "60" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libgnutls28-dev"; echo "XXX"
+	apt-get -y install libgnutls28-dev &> /dev/null
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
