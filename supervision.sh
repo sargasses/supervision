@@ -3327,20 +3327,28 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	#/etc/init.d/nrpe stop &> /dev/null
 	#fi
 
-	#groupadd centreon-broker
-	#useradd -g centreon-broker -m -r -d /var/lib/centreon-broker centreon-broker
+	groupadd -g 6002 centreon-broker
+	useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
 
 	tar xvzf $nom_fichier
 	cd $nom_repertoire
 	
-	#cmake \ 
-	#make
-	#make install
+	cmake \
+		-DWITH_DAEMONS='central-broker;central-rrd' \
+		-DWITH_GROUP=centreon-broker \
+		-DWITH_PREFIX=/usr/local/centreon-broker \
+		-DWITH_STARTUP_DIR=/etc/init.d \
+		-DWITH_STARTUP_SCRIPT=auto \
+		-DWITH_TESTING=0 \
+		-DWITH_USER=centreon-broker
+
+	make
+	make install
 
 	cd ..
 
-	#rm -rf /root/$nom_repertoire/
-	#rm -f /root/$nom_fichier
+	rm -rf /root/$nom_repertoire/
+	rm -f /root/$nom_fichier
 
 (
  echo "90" ; sleep 1
