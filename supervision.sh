@@ -15,7 +15,7 @@
 
 DIALOG=${DIALOG=dialog}
 
-serveur_installation=192.168.4.10
+serveur_installation=192.168.4.1
 utilisateur_installation=installation
 password_installation=installation
 base_installation=installation
