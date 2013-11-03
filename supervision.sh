@@ -15,10 +15,8 @@
 
 DIALOG=${DIALOG=dialog}
 
-serveur_installation=192.168.4.1
-utilisateur_installation=installation
-password_installation=installation
-base_installation=installation
+REPERTOIRE_CONFIG=/usr/local/scripts/config
+FICHIER_CONFIG=config_centralisation_installation
 
 
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
@@ -139,10 +137,89 @@ else
 
 fi
 
+#############################################################################
+# Fonction Lecture Fichier Configuration Gestion Centraliser
+#############################################################################
+
+lecture_config_centraliser()
+{
+
+if test -e $REPERTOIRE_CONFIG/$FICHIER_CONFIG ; then
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	VAR=VAR$num
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CONFIG | grep $VAR=`
+	VAL2=`expr length "$VAL1"`
+	VAL3=`expr substr "$VAL1" 7 $VAL2`
+	eval VAR$num="$VAL3"
+	num=`expr $num + 1`
+	done
+
+else 
+
+mkdir -p $REPERTOIRE_CONFIG
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	echo "VAR$num=" >> $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	num=`expr $num + 1`
+	done
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	VAR=VALFIC$num
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CONFIG | grep $VAR=`
+	VAL2=`expr length "$VAL1"`
+	VAL3=`expr substr "$VAL1" 7 $VAL2`
+	eval VAR$num="$VAL3"
+	num=`expr $num + 1`
+	done
+
+fi
+
+if [ "$VAR10" = "" ] ; then
+	REF10=`uname -n`
+else
+	REF10=$VAR10
+fi
+
+if [ "$VAR11" = "" ] ; then
+	REF11=3306
+else
+	REF11=$VAR11
+fi
+
+if [ "$VAR12" = "" ] ; then
+	REF12=installation
+else
+	REF12=$VAR12
+fi
+
+if [ "$VAR13" = "" ] ; then
+	REF13=root
+else
+	REF13=$VAR13
+fi
+
+if [ "$VAR14" = "" ] ; then
+	REF14=directory
+else
+	REF14=$VAR14
+fi
+
+}
+
 
 #############################################################################
 # Fonction Nettoyage De La Base De Données (table inventaire)
 #############################################################################
+
+nettoyage_table_installation()
+{
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -155,7 +232,7 @@ if [ ! -f /usr/bin/smistrip ] ||
 	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -163,7 +240,7 @@ if [ ! -f /usr/bin/smistrip ] ||
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -175,7 +252,7 @@ if [ ! -f /usr/local/nagios/bin/nagios ] ; then
 	where logiciel='nagios' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -183,7 +260,7 @@ if [ ! -f /usr/local/nagios/bin/nagios ] ; then
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -197,7 +274,7 @@ if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
 	where logiciel='nagios-plugins' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -205,7 +282,7 @@ if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -218,7 +295,7 @@ if [ ! -f /usr/local/nagios/bin/ndomod.o ] ||
 	where logiciel='ndoutils' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -226,7 +303,7 @@ if [ ! -f /usr/local/nagios/bin/ndomod.o ] ||
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -238,7 +315,7 @@ if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	where logiciel='nrpe' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -246,7 +323,7 @@ if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -258,7 +335,7 @@ if [ ! -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 	
@@ -266,7 +343,7 @@ if [ ! -d /usr/local/centreon/test ] ; then
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -278,7 +355,7 @@ if [ ! -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-broker' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -286,7 +363,7 @@ if [ ! -d /usr/local/centreon/test ] ; then
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -301,7 +378,7 @@ if [ ! -f /etc/centreon/instCentCore.conf ] ||
 	where logiciel='centreon' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -309,7 +386,7 @@ if [ ! -f /etc/centreon/instCentCore.conf ] ||
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
@@ -325,7 +402,7 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	where logiciel='centreon-widgets' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -333,17 +410,18 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	optimize table inventaire ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp > /dev/null
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
 
 	rm -f $fichtemp
 fi
 
+}
 
 #############################################################################
-# Fonction Inventaire Nouvelle Version D'installation
+# Fonction Inventaire Version Logiciel
 #############################################################################
 
-inventaire_nouvelle_version_installation()
+inventaire_version_logiciel()
 {
 
 
@@ -359,7 +437,7 @@ if [ -f /usr/bin/smistrip ] ||
 	where logiciel='snmp-mibs-downloader' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_snmp_mibs_downloader=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -372,7 +450,7 @@ if [ -f /usr/bin/smistrip ] ||
 	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_snmp_mibs_downloader=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -387,7 +465,7 @@ if [ -f /usr/local/nagios/bin/nagios ] ; then
 	where logiciel='nagios' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_nagios=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -400,7 +478,7 @@ if [ -f /usr/local/nagios/bin/nagios ] ; then
 	where logiciel='nagios' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_nagios=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -417,7 +495,7 @@ if [ -f /usr/local/nagios/libexec/check_ping ] ||
 	where logiciel='nagios-plugins' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_nagios_plugins=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -430,7 +508,7 @@ if [ -f /usr/local/nagios/libexec/check_ping ] ||
 	where logiciel='nagios-plugins' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_nagios_plugins=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -446,7 +524,7 @@ if [ -f /usr/local/nagios/bin/ndomod.o ] ||
 	where logiciel='ndoutils' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_ndoutils=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -459,7 +537,7 @@ if [ -f /usr/local/nagios/bin/ndomod.o ] ||
 	where logiciel='ndoutils' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_ndoutils=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -474,7 +552,7 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	where logiciel='nrpe' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_nrpe=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -487,7 +565,7 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	where logiciel='nrpe' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_nrpe=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -502,7 +580,7 @@ if [ -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-engine' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_centreon_engine=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -515,7 +593,7 @@ if [ -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_centreon_engine=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -530,7 +608,7 @@ if [ -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-broker' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_centreon_broker=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -543,7 +621,7 @@ if [ -d /usr/local/centreon/test ] ; then
 	where logiciel='centreon-broker' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_centreon_broker=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -561,7 +639,7 @@ if [ -f /etc/centreon/instCentCore.conf ] ||
 	where logiciel='centreon' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_centreon=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -574,7 +652,7 @@ if [ -f /etc/centreon/instCentCore.conf ] ||
 	where logiciel='centreon' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_centreon=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -593,7 +671,7 @@ if [ -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	where logiciel='centreon-widgets' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference_centreon_widgets=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -606,12 +684,36 @@ if [ -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	where logiciel='centreon-widgets' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_centreon_widgets=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
 fi
+
+}
+
+#############################################################################
+# Fonction Message d'erreur
+#############################################################################
+
+message_erreur()
+{
+	
+cat <<- EOF > /tmp/erreur
+Veuillez vous assurer que les parametres saisie
+                sont correcte
+EOF
+
+erreur=`cat /tmp/erreur`
+
+$DIALOG --ok-label "Quitter" \
+	 --colors \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Erreur" \
+	 --msgbox  "\Z1$erreur\Zn" 6 52 
+
+rm -f /tmp/erreur
 
 }
 
@@ -622,44 +724,49 @@ fi
 verification_installation()
 {
 
-inventaire_nouvelle_version_installation
 
 # 0=noir, 1=rouge, 2=vert, 3=jaune, 4=bleu, 5=magenta, 6=cyan 7=blanc
 
 
+if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CONFIG > /dev/null ; then
+	choix1="\Z1Gestion Centraliser des Installations\Zn" 
+else
+	choix1="\Z2Gestion Centraliser des Installations\Zn"  
+fi
+
 if [ ! -f /usr/bin/smistrip ] ||
    [ ! -f /usr/bin/download-mibs ] ; then
-	choix1="\Z1Installation MIB SNMP Complementaire\Zn" 
+	choix2="\Z1Installation MIB SNMP Complementaire\Zn" 
 
 elif [ "$version_reference_snmp_mibs_downloader" != "$version_installe_snmp_mibs_downloader" ] ; then
-	choix1="\Zb\Z3Installation MIB SNMP Complementaire\Zn" 
+	choix2="\Zb\Z3Installation MIB SNMP Complementaire\Zn" 
 
 else
-	choix1="\Z2Installation MIB SNMP Complementaire\Zn" 
+	choix2="\Z2Installation MIB SNMP Complementaire\Zn" 
 fi
 
 if [ ! -f /usr/bin/fping ] ||
    [ ! -f /usr/bin/mkpasswd ] ||
    [ ! -f /usr/include/libpng12/png.h ] ; then
-	choix2="\Z1Installation Composant Nagios\Zn" 
+	choix3="\Z1Installation Composant Nagios\Zn" 
 else
-	choix2="\Z2Installation Composant Nagios\Zn" 
+	choix3="\Z2Installation Composant Nagios\Zn" 
 fi
 
 if [ ! -f /usr/include/gnutls/gnutls.h ] ||
    [ ! -f /usr/include/krb5.h ] ||
    [ ! -f /usr/lib/libmcrypt.so ] ; then
-	choix3="\Z1Installation Composant Nagios Plugins\Zn" 
+	choix4="\Z1Installation Composant Nagios Plugins\Zn" 
 else
-	choix3="\Z2Installation Composant Nagios Plugins\Zn" 
+	choix4="\Z2Installation Composant Nagios Plugins\Zn" 
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/include/curl/curl.h ] ||
    [ ! -f /usr/include/openssl/ssl.h ] ; then
-	choix4="\Z1Installation Composant NRPE\Zn" 
+	choix5="\Z1Installation Composant NRPE\Zn" 
 else
-	choix4="\Z2Installation Composant NRPE\Zn" 
+	choix5="\Z2Installation Composant NRPE\Zn" 
 fi
 
 if [ ! -f /usr/bin/cmake ] ||
@@ -667,103 +774,103 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -f /usr/bin/soapcpp2 ] ||
    [ ! -f /usr/include/zlib.h ] ||
    [ ! -f /usr/include/openssl/aes.h ] ; then
-	choix5="\Z1Installation Composant Centreon Engine\Zn" 
+	choix6="\Z1Installation Composant Centreon Engine\Zn" 
 else
-	choix5="\Z2Installation Composant Centreon Engine\Zn" 
+	choix6="\Z2Installation Composant Centreon Engine\Zn" 
 fi
 
 if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
    [ ! -f /usr/lib/librrd.so ] ; then
-	choix6="\Z1Installation Composant Centreon Broker\Zn" 
+	choix7="\Z1Installation Composant Centreon Broker\Zn" 
 else
-	choix6="\Z2Installation Composant Centreon Broker\Zn" 
+	choix7="\Z2Installation Composant Centreon Broker\Zn" 
 fi
 
 if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
    [ ! -f /usr/lib/perl5/XML/Parser.pm ] ; then
-	choix7="\Z1Installation Composant Centreon\Zn" 
+	choix8="\Z1Installation Composant Centreon\Zn" 
 else
-	choix7="\Z2Installation Composant Centreon\Zn" 
+	choix8="\Z2Installation Composant Centreon\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/nagios ] ; then
-	choix8="\Z1Installation Nagios\Zn" 
+	choix9="\Z1Installation Nagios\Zn" 
 
 elif [ "$version_reference_nagios" != "$version_installe_nagios" ] ; then
-	choix8="\Zb\Z3Installation Nagios\Zn" 
+	choix9="\Zb\Z3Installation Nagios\Zn" 
 
 else
-	choix8="\Z2Installation Nagios\Zn" 
+	choix9="\Z2Installation Nagios\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
    [ ! -f /usr/local/nagios/libexec/check_fping ] ||
    [ ! -f /usr/local/nagios/libexec/check_ssh ] ; then
-	choix9="\Z1Installation Nagios Plugins\Zn" 
+	choix10="\Z1Installation Nagios Plugins\Zn" 
 
 elif [ "$version_reference_nagios_plugins" != "$version_installe_nagios_plugins" ] ; then
-	choix9="\Zb\Z3Installation Nagios Plugins\Zn" 
+	choix10="\Zb\Z3Installation Nagios Plugins\Zn" 
 
 else
-	choix9="\Z2Installation Nagios Plugins\Zn" 
+	choix10="\Z2Installation Nagios Plugins\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/ndomod.o ] ||
    [ ! -f /usr/local/nagios/bin/ndo2db ] ; then
-	choix10="\Z1Installation NDOutils\Zn" 
+	choix11="\Z1Installation NDOutils\Zn" 
 
 elif [ "$version_reference_ndoutils" != "$version_installe_ndoutils" ] ; then
-	choix10="\Zb\Z3Installation NDOutils\Zn" 
+	choix11="\Zb\Z3Installation NDOutils\Zn" 
 
 else
-	choix10="\Z2Installation NDOutils\Zn" 
+	choix11="\Z2Installation NDOutils\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
-	choix11="\Z1Installation NRPE\Zn" 
+	choix12="\Z1Installation NRPE\Zn" 
 
 elif [ "$version_reference_nrpe" != "$version_installe_nrpe" ] ; then
-	choix11="\Zb\Z3Installation NRPE\Zn" 
+	choix12="\Zb\Z3Installation NRPE\Zn" 
 
 else
-	choix11="\Z2Installation NRPE\Zn" 
+	choix12="\Z2Installation NRPE\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/test ] ; then
-	choix12="\Z1Installation Centreon Engine\Zn" 
+	choix13="\Z1Installation Centreon Engine\Zn" 
 
 elif [ "$version_reference_centreon_engine" != "$version_installe_centreon_engine" ] ; then
-	choix12="\Zb\Z3Installation Centreon Engine\Zn" 
+	choix13="\Zb\Z3Installation Centreon Engine\Zn" 
 
 else
-	choix12="\Z2Installation Centreon Engine\Zn" 
+	choix13="\Z2Installation Centreon Engine\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/test ] ; then
-	choix13="\Z1Installation Centreon Broker\Zn" 
+	choix14="\Z1Installation Centreon Broker\Zn" 
 
 elif [ "$version_reference_centreon_broker" != "$version_installe_centreon_broker" ] ; then
-	choix13="\Zb\Z3Installation Centreon Broker\Zn"
+	choix14="\Zb\Z3Installation Centreon Broker\Zn"
 
 else
-	choix13="\Z2Installation Centreon Broker\Zn" 
+	choix14="\Z2Installation Centreon Broker\Zn" 
 fi
 
 if [ ! -f /etc/centreon/instCentCore.conf ] ||
    [ ! -f /etc/centreon/instCentPlugins.conf ] ||
    [ ! -f /etc/centreon/instCentStorage.conf ] ||
    [ ! -f /etc/centreon/instCentWeb.conf ] ; then
-	choix14="\Z1Installation Centreon\Zn"
+	choix15="\Z1Installation Centreon\Zn"
  
 elif [ "$version_reference_centreon" != "$version_installe_centreon" ] ; then
-	choix14="\Zb\Z3Installation Centreon\Zn" 
+	choix15="\Zb\Z3Installation Centreon\Zn" 
 
 else
-	choix14="\Z2Installation Centreon\Zn" 
+	choix15="\Z2Installation Centreon\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
@@ -771,13 +878,13 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/host-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/servicegroup-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/service-monitoring ] ; then
-	choix15="\Z1Installation Centreon Widgets\Zn" 
+	choix16="\Z1Installation Centreon Widgets\Zn" 
 
 elif [ "$version_reference_centreon_widgets" != "$version_installe_centreon_widgets" ] ; then
-	choix15="\Zb\Z3Installation Centreon Widgets\Zn" 
+	choix16="\Zb\Z3Installation Centreon Widgets\Zn" 
 
 else
-	choix15="\Z2Installation Centreon Widgets\Zn" 
+	choix16="\Z2Installation Centreon Widgets\Zn" 
 fi
 
 }
@@ -789,6 +896,9 @@ fi
 menu()
 {
 
+lecture_config_centraliser
+inventaire_version_logiciel
+verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -797,25 +907,33 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Serveur de Supervision" \
 	  --clear \
 	  --colors \
-	  --default-item "2" \
-	  --menu "Quel est votre choix" 11 54 5 \
-	  "1" "Installation Serveur de Supervision" \
-	  "2" "Quitter" 2> $fichtemp
+	  --default-item "3" \
+	  --menu "Quel est votre choix" 11 62 5 \
+	  "1" "$choix1" \
+	  "2" "Installation Serveur de Supervision" \
+	  "3" "Quitter" 2> $fichtemp
 
 
 valret=$?
 choix=`cat $fichtemp`
 case $valret in
 
- 0)	# Installation Serveur de Supervision
+ 0)	# Gestion Centraliser des Installations
 	if [ "$choix" = "1" ]
+	then
+		rm -f $fichtemp
+              menu_gestion_centraliser_installations
+	fi
+
+	# Installation Serveur de Supervision
+	if [ "$choix" = "2" ]
 	then
 		rm -f $fichtemp
               menu_installation_serveur_supervision
 	fi
 
 	# Quitter
-	if [ "$choix" = "2" ]
+	if [ "$choix" = "3" ]
 	then
 		clear
 	fi
@@ -840,6 +958,82 @@ exit
 }
 
 #############################################################################
+# Fonction Menu Gestion Centraliser des Installations
+#############################################################################
+
+menu_gestion_centraliser_installations()
+{
+
+lecture_config_centraliser
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --insecure \
+	  --title "Gestion Centraliser des Installations" \
+	  --mixedform "Quel est votre choix" 11 60 0 \
+	  "Nom Serveur:"     1 1  "$REF10"  1 24  28 26 0  \
+	  "Port Serveur:"    2 1  "$REF11"  2 24  28 26 0  \
+	  "Base de Donnees:" 3 1  "$REF12"  3 24  28 26 0  \
+	  "Compte Root:"     4 1  "$REF13"  4 24  28 26 0  \
+	  "Password Root:"   5 1  "$REF14"  5 24  28 26 1  2> $fichtemp
+
+
+valret=$?
+choix=`cat $fichtemp`
+case $valret in
+
+ 0)	# Gestion Centraliser des Installations
+	VARSAISI10=$(sed -n 1p $fichtemp)
+	VARSAISI11=$(sed -n 2p $fichtemp)
+	VARSAISI12=$(sed -n 3p $fichtemp)
+	VARSAISI13=$(sed -n 4p $fichtemp)
+	VARSAISI14=$(sed -n 5p $fichtemp)
+	
+
+	sed -i "s/VAR10=$VAR10/VAR10=$VARSAISI10/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR11=$VAR11/VAR11=$VARSAISI11/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR12=$VAR12/VAR12=$VARSAISI12/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR13=$VAR13/VAR13=$VARSAISI13/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR14=$VAR14/VAR14=$VARSAISI14/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+
+      
+	cat <<- EOF > /tmp/databases.txt
+	SHOW DATABASES;
+	EOF
+
+	mysql -h $VARSAISI10 -P $VARSAISI11 -u $VARSAISI13 -p$VARSAISI14 < /tmp/databases.txt &>/tmp/resultat.txt
+
+	if grep -w "^$VARSAISI12" /tmp/resultat.txt > /dev/null ; then
+	sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+
+	else
+	sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	message_erreur
+	fi
+
+	rm -f /tmp/databases.txt
+	rm -f /tmp/resultat.txt
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	;;
+
+esac
+
+rm -f $fichtemp
+
+menu
+
+}
+
+#############################################################################
 # Fonction Menu Installation Serveur de Supervision
 #############################################################################
 
@@ -858,7 +1052,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 62 5 \
 	  "1" "Installation Composant Complementaire" \
-	  "2" "$choix1" \
+	  "2" "$choix2" \
 	  "3" "Installation Suite Nagios" \
 	  "4" "Installation Suite Centreon" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
@@ -938,12 +1132,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "7" \
 	  --menu "Quel est votre choix" 14 64 7 \
-	  "1" "$choix2" \
-	  "2" "$choix3" \
-	  "3" "$choix4" \
-	  "4" "$choix5" \
-	  "5" "$choix6" \
-	  "6" "$choix7" \
+	  "1" "$choix3" \
+	  "2" "$choix4" \
+	  "3" "$choix5" \
+	  "4" "$choix6" \
+	  "5" "$choix7" \
+	  "6" "$choix8" \
 	  "7" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1035,10 +1229,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 52 5 \
-	  "1" "$choix8" \
-	  "2" "$choix9" \
-	  "3" "$choix10" \
-	  "4" "$choix11" \
+	  "1" "$choix9" \
+	  "2" "$choix10" \
+	  "3" "$choix11" \
+	  "4" "$choix12" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1116,10 +1310,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 54 5 \
-	  "1" "$choix12" \
-	  "2" "$choix13" \
-	  "3" "$choix14" \
-	  "4" "$choix15" \
+	  "1" "$choix13" \
+	  "2" "$choix14" \
+	  "3" "$choix15" \
+	  "4" "$choix16" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1468,7 +1662,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='snmp-mibs-downloader' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -1494,7 +1688,7 @@ case $valret in
 	where logiciel='snmp-mibs-downloader' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -1550,7 +1744,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='snmp-mibs-downloader' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -1562,7 +1756,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='snmp-mibs-downloader' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -1611,7 +1805,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -1620,7 +1814,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'snmp-mibs-downloader' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -1629,7 +1823,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -1665,7 +1859,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -1691,7 +1885,7 @@ case $valret in
 	where logiciel='nagios' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -1747,7 +1941,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -1759,7 +1953,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -1771,7 +1965,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -1990,7 +2184,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -1999,7 +2193,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'nagios' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2008,7 +2202,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2045,7 +2239,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios-plugins' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -2071,7 +2265,7 @@ case $valret in
 	where logiciel='nagios-plugins' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -2127,7 +2321,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios-plugins' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -2139,7 +2333,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios-plugins' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -2151,7 +2345,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios-plugins' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -2203,7 +2397,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nagios-plugins' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2212,7 +2406,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'nagios-plugins' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2221,7 +2415,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2258,7 +2452,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -2284,7 +2478,7 @@ case $valret in
 	where logiciel='ndoutils' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -2340,7 +2534,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -2352,7 +2546,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -2364,7 +2558,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -2376,7 +2570,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils-light' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier_patch=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -2388,7 +2582,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils-light' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier_patch=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -2449,7 +2643,6 @@ case $valret in
 
 esac
 
-	
 	./configure --prefix=/usr/local/nagios/ --enable-mysql --disable-pgsql --with-ndo2db-user=nagios --with-ndo2db-group=nagios
 	make
 
@@ -2584,7 +2777,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='ndoutils' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2593,7 +2786,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'ndoutils' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2602,7 +2795,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2639,7 +2832,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nrpe' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -2665,7 +2858,7 @@ case $valret in
 	where logiciel='nrpe' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -2721,7 +2914,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nrpe' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -2733,7 +2926,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nrpe' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -2745,7 +2938,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nrpe' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -2924,7 +3117,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='nrpe' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2933,7 +3126,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'nrpe' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2942,7 +3135,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -2979,7 +3172,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-engine' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -3005,7 +3198,7 @@ case $valret in
 	where logiciel='centreon-engine' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -3061,7 +3254,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-engine' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3073,7 +3266,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-engine' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3085,7 +3278,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-engine' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -3139,7 +3332,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3148,7 +3341,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'centreon-engine' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3157,7 +3350,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3194,7 +3387,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-broker' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -3220,7 +3413,7 @@ case $valret in
 	where logiciel='centreon-broker' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -3276,7 +3469,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-broker' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3288,7 +3481,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-broker' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3300,7 +3493,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-broker' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -3362,7 +3555,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-broker' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3371,7 +3564,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'centreon-broker' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3380,7 +3573,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3417,7 +3610,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -3443,7 +3636,7 @@ case $valret in
 	where logiciel='centreon' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -3499,7 +3692,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3511,7 +3704,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3523,7 +3716,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-repertoire.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
 
 	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
 	rm -f /tmp/nom-repertoire.txt
@@ -3539,7 +3732,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-translations-messages' and version='$version_translations.x' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier_messages=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3551,7 +3744,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-translations-messages' and version='$version_translations.x' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier_messages=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3563,7 +3756,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-translations-help' and version='$version_translations.x' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier_help=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3575,7 +3768,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-translations-help' and version='$version_translations.x' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier_help=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3774,7 +3967,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3783,7 +3976,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'centreon' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3792,7 +3985,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -3829,7 +4022,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-installe.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
 	version_installe_centreon=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
@@ -3862,7 +4055,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-widgets' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/version-reference.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
 	version_reference=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
@@ -3888,7 +4081,7 @@ case $valret in
 	where logiciel='centreon-widgets' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/liste-version.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
 
 
 	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
@@ -3944,7 +4137,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-widgets' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/url-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
 
 	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
 	rm -f /tmp/url-fichier.txt
@@ -3956,7 +4149,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-widgets' and version='$choix_version' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp >/tmp/nom-fichier.txt
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
 
 	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
 	rm -f /tmp/nom-fichier.txt
@@ -3997,7 +4190,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	where logiciel='centreon-widgets' and uname='`uname -n`' ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -4006,7 +4199,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	values ( 'centreon-widgets' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
@@ -4015,7 +4208,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	alter table inventaire order by uname ;
 	EOF
 
-	mysql -h $serveur_installation -u $utilisateur_installation -p$password_installation $base_installation < $fichtemp
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 	rm -f $fichtemp
 
