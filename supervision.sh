@@ -328,7 +328,7 @@ if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-clib/libcentreon_clib.so ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -592,7 +592,7 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	rm -f $fichtemp
 fi
 
-if [ -d /usr/local/centreon/test ] ; then
+if [ -f /usr/local/centreon-clib/libcentreon_clib.so ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3411,24 +3411,23 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Clib" 10 60 0 \
 
 
-	#if [ -f $NrpePidFile ] ; then
-	#/etc/init.d/nrpe stop &> /dev/null
-	#fi
-
-	#groupadd centreon-broker
-	#useradd -g centreon-broker -m -r -d /var/lib/centreon-broker centreon-broker
-
 	tar xvzf $nom_fichier
-	cd $nom_repertoire
+	cd $nom_repertoire/build
 	
-	#cmake \ 
-	#make
-	#make install
+	cmake \
+		-DWITH_TESTING=0 \
+		-DWITH_PREFIX=/usr/local/centreon-clib \
+		-DWITH_SHARED_LIB=1 \
+		-DWITH_STATIC_LIB=0 \
+		-DWITH_PKGCONFIG_DIR=/usr/lib/pkgconfig .
 
-	cd ..
+	make
+	make install
 
-	#rm -rf /root/$nom_repertoire/
-	#rm -f /root/$nom_fichier
+	cd ../..
+
+	rm -rf /root/$nom_repertoire/
+	rm -f /root/$nom_fichier
 
 (
  echo "90" ; sleep 1
@@ -3858,7 +3857,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 		-DWITH_STARTUP_DIR=/etc/init.d \
 		-DWITH_STARTUP_SCRIPT=auto \
 		-DWITH_TESTING=0 \
-		-DWITH_USER=centreon-broker
+		-DWITH_USER=centreon-broker .
 
 	make
 	make install
