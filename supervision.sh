@@ -328,7 +328,7 @@ if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -f /usr/local/centreon-clib/libcentreon_clib.so ] ; then
+if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -368,7 +368,10 @@ if [ ! -d /usr/local/centreon/test ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-broker/bin/cbd ] ||
+   [ ! -f /usr/local/centreon-broker/etc/master.run ] ||
+   [ ! -f /usr/local/centreon-broker/lib/cbmod.so ] ||
+   [ ! -f /etc/init.d/cbd ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -592,7 +595,7 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	rm -f $fichtemp
 fi
 
-if [ -f /usr/local/centreon-clib/libcentreon_clib.so ] ; then
+if [ -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -648,7 +651,10 @@ if [ -d /usr/local/centreon/test ] ; then
 	rm -f $fichtemp
 fi
 
-if [ -d /usr/local/centreon/test ] ; then
+if [ -f /usr/local/centreon-broker/bin/cbd ] ||
+   [ -f /usr/local/centreon-broker/etc/master.run ] ||
+   [ -f /usr/local/centreon-broker/lib/cbmod.so ] ||
+   [ -f /etc/init.d/cbd ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -895,7 +901,7 @@ else
 	choix13="\Z2Installation NRPE\Zn" 
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 	choix14="\Z1Installation Centreon Clib\Zn" 
 
 elif [ "$version_reference_centreon_clib" != "$version_installe_centreon_clib" ] ; then
@@ -915,7 +921,10 @@ else
 	choix15="\Z2Installation Centreon Engine\Zn" 
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-broker/bin/cbd ] ||
+   [ ! -f /usr/local/centreon-broker/etc/master.run ] ||
+   [ ! -f /usr/local/centreon-broker/lib/cbmod.so ] ||
+   [ ! -f /etc/init.d/cbd ] ; then
 	choix16="\Z1Installation Centreon Broker\Zn" 
 
 elif [ "$version_reference_centreon_broker" != "$version_installe_centreon_broker" ] ; then
@@ -3848,7 +3857,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
 
 	tar xvzf $nom_fichier
-	cd $nom_repertoire
+	cd $nom_repertoire/build
 	
 	cmake \
 		-DWITH_DAEMONS='central-broker;central-rrd' \
@@ -3862,7 +3871,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	make
 	make install
 
-	cd ..
+	cd ../..
 
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
