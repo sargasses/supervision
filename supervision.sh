@@ -332,6 +332,26 @@ if [ ! -d /usr/local/centreon/test ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
+	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+	
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -d /usr/local/centreon/test ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
 	where logiciel='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
@@ -577,6 +597,34 @@ if [ -d /usr/local/centreon/test ] ; then
 	cat <<- EOF > $fichtemp
 	select version
 	from version
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference_centreon_clib=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+
+
+	cat <<- EOF > $fichtemp
+	select version
+	from inventaire
+	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
+
+	version_installe_centreon_clib=$(sed '$!d' /tmp/version-installe.txt)
+	rm -f /tmp/version-installe.txt
+	rm -f $fichtemp
+fi
+
+if [ -d /usr/local/centreon/test ] ; then
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
 	where logiciel='centreon-engine' ;
 	EOF
 
@@ -769,108 +817,125 @@ else
 	choix5="\Z2Installation Composant NRPE\Zn" 
 fi
 
+if [ ! -f /usr/share/build-essential/list ] ||
+   [ ! -f /usr/bin/cmake ] ; then
+	choix6="\Z1Installation Composant Centreon Clib\Zn" 
+else
+	choix6="\Z2Installation Composant Centreon Clib\Zn" 
+fi
+
 if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -f /usr/bin/soapcpp2 ] ||
    [ ! -f /usr/include/zlib.h ] ||
    [ ! -f /usr/include/openssl/aes.h ] ; then
-	choix6="\Z1Installation Composant Centreon Engine\Zn" 
+	choix7="\Z1Installation Composant Centreon Engine\Zn" 
 else
-	choix6="\Z2Installation Composant Centreon Engine\Zn" 
+	choix7="\Z2Installation Composant Centreon Engine\Zn" 
 fi
 
 if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
    [ ! -f /usr/lib/librrd.so ] ; then
-	choix7="\Z1Installation Composant Centreon Broker\Zn" 
+	choix8="\Z1Installation Composant Centreon Broker\Zn" 
 else
-	choix7="\Z2Installation Composant Centreon Broker\Zn" 
+	choix8="\Z2Installation Composant Centreon Broker\Zn" 
 fi
 
 if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
    [ ! -f /usr/lib/perl5/XML/Parser.pm ] ; then
-	choix8="\Z1Installation Composant Centreon\Zn" 
+	choix9="\Z1Installation Composant Centreon\Zn" 
 else
-	choix8="\Z2Installation Composant Centreon\Zn" 
+	choix9="\Z2Installation Composant Centreon\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/nagios ] ; then
-	choix9="\Z1Installation Nagios\Zn" 
+	choix10="\Z1Installation Nagios\Zn" 
 
 elif [ "$version_reference_nagios" != "$version_installe_nagios" ] ; then
-	choix9="\Zb\Z3Installation Nagios\Zn" 
+	choix10="\Zb\Z3Installation Nagios\Zn" 
 
 else
-	choix9="\Z2Installation Nagios\Zn" 
+	choix10="\Z2Installation Nagios\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
    [ ! -f /usr/local/nagios/libexec/check_fping ] ||
    [ ! -f /usr/local/nagios/libexec/check_ssh ] ; then
-	choix10="\Z1Installation Nagios Plugins\Zn" 
+	choix11="\Z1Installation Nagios Plugins\Zn" 
 
 elif [ "$version_reference_nagios_plugins" != "$version_installe_nagios_plugins" ] ; then
-	choix10="\Zb\Z3Installation Nagios Plugins\Zn" 
+	choix11="\Zb\Z3Installation Nagios Plugins\Zn" 
 
 else
-	choix10="\Z2Installation Nagios Plugins\Zn" 
+	choix11="\Z2Installation Nagios Plugins\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/ndomod.o ] ||
    [ ! -f /usr/local/nagios/bin/ndo2db ] ; then
-	choix11="\Z1Installation NDOutils\Zn" 
+	choix12="\Z1Installation NDOutils\Zn" 
 
 elif [ "$version_reference_ndoutils" != "$version_installe_ndoutils" ] ; then
-	choix11="\Zb\Z3Installation NDOutils\Zn" 
+	choix12="\Zb\Z3Installation NDOutils\Zn" 
 
 else
-	choix11="\Z2Installation NDOutils\Zn" 
+	choix12="\Z2Installation NDOutils\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
-	choix12="\Z1Installation NRPE\Zn" 
+	choix13="\Z1Installation NRPE\Zn" 
 
 elif [ "$version_reference_nrpe" != "$version_installe_nrpe" ] ; then
-	choix12="\Zb\Z3Installation NRPE\Zn" 
+	choix13="\Zb\Z3Installation NRPE\Zn" 
 
 else
-	choix12="\Z2Installation NRPE\Zn" 
+	choix13="\Z2Installation NRPE\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/test ] ; then
-	choix13="\Z1Installation Centreon Engine\Zn" 
+	choix14="\Z1Installation Centreon Clib\Zn" 
+
+elif [ "$version_reference_centreon_clib" != "$version_installe_centreon_clib" ] ; then
+	choix14="\Zb\Z3Installation Centreon Clib\Zn" 
+
+else
+	choix14="\Z2Installation Centreon Clib\Zn" 
+fi
+
+if [ ! -d /usr/local/centreon/test ] ; then
+	choix15="\Z1Installation Centreon Engine\Zn" 
 
 elif [ "$version_reference_centreon_engine" != "$version_installe_centreon_engine" ] ; then
-	choix13="\Zb\Z3Installation Centreon Engine\Zn" 
+	choix15="\Zb\Z3Installation Centreon Engine\Zn" 
 
 else
-	choix13="\Z2Installation Centreon Engine\Zn" 
+	choix15="\Z2Installation Centreon Engine\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/test ] ; then
-	choix14="\Z1Installation Centreon Broker\Zn" 
+	choix16="\Z1Installation Centreon Broker\Zn" 
 
 elif [ "$version_reference_centreon_broker" != "$version_installe_centreon_broker" ] ; then
-	choix14="\Zb\Z3Installation Centreon Broker\Zn"
+	choix16="\Zb\Z3Installation Centreon Broker\Zn"
 
 else
-	choix14="\Z2Installation Centreon Broker\Zn" 
+	choix16="\Z2Installation Centreon Broker\Zn" 
 fi
 
 if [ ! -f /etc/centreon/instCentCore.conf ] ||
    [ ! -f /etc/centreon/instCentPlugins.conf ] ||
    [ ! -f /etc/centreon/instCentStorage.conf ] ||
    [ ! -f /etc/centreon/instCentWeb.conf ] ; then
-	choix15="\Z1Installation Centreon\Zn"
+	choix17="\Z1Installation Centreon\Zn"
  
 elif [ "$version_reference_centreon" != "$version_installe_centreon" ] ; then
-	choix15="\Zb\Z3Installation Centreon\Zn" 
+	choix17="\Zb\Z3Installation Centreon\Zn" 
 
 else
-	choix15="\Z2Installation Centreon\Zn" 
+	choix17="\Z2Installation Centreon\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
@@ -878,13 +943,13 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/host-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/servicegroup-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/service-monitoring ] ; then
-	choix16="\Z1Installation Centreon Widgets\Zn" 
+	choix18="\Z1Installation Centreon Widgets\Zn" 
 
 elif [ "$version_reference_centreon_widgets" != "$version_installe_centreon_widgets" ] ; then
-	choix16="\Zb\Z3Installation Centreon Widgets\Zn" 
+	choix18="\Zb\Z3Installation Centreon Widgets\Zn" 
 
 else
-	choix16="\Z2Installation Centreon Widgets\Zn" 
+	choix18="\Z2Installation Centreon Widgets\Zn" 
 fi
 
 }
@@ -1130,15 +1195,16 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Complementaire" \
 	  --clear \
 	  --colors \
-	  --default-item "7" \
-	  --menu "Quel est votre choix" 14 64 7 \
+	  --default-item "8" \
+	  --menu "Quel est votre choix" 16 64 8 \
 	  "1" "$choix3" \
 	  "2" "$choix4" \
 	  "3" "$choix5" \
 	  "4" "$choix6" \
 	  "5" "$choix7" \
 	  "6" "$choix8" \
-	  "7" "\Z4Retour\Zn" 2> $fichtemp
+	  "7" "$choix9" \
+	  "8" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1166,6 +1232,13 @@ case $valret in
 		installation_composant_nrpe
 	fi
 
+	# Installation Composant Centreon Clib
+	if [ "$choix" = "4" ]
+	then
+		rm -f $fichtemp
+		installation_composant_centreon_clib
+	fi
+
 	# Installation Composant Centreon Engine
 	if [ "$choix" = "4" ]
 	then
@@ -1174,21 +1247,21 @@ case $valret in
 	fi
 
 	# Installation Composant Centreon Broker
-	if [ "$choix" = "5" ]
+	if [ "$choix" = "6" ]
 	then
 		rm -f $fichtemp
 		installation_composant_centreon_broker
 	fi
 
 	# Installation Composant Centreon
-	if [ "$choix" = "6" ]
+	if [ "$choix" = "7" ]
 	then
 		rm -f $fichtemp
 		installation_composant_centreon
 	fi
 
 	# Retour
-	if [ "$choix" = "7" ]
+	if [ "$choix" = "8" ]
 	then
 		clear
 	fi
@@ -1229,10 +1302,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 52 5 \
-	  "1" "$choix9" \
-	  "2" "$choix10" \
-	  "3" "$choix11" \
-	  "4" "$choix12" \
+	  "1" "$choix10" \
+	  "2" "$choix11" \
+	  "3" "$choix12" \
+	  "4" "$choix13" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1308,49 +1381,57 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Suite Centreon" \
 	  --clear \
 	  --colors \
-	  --default-item "5" \
-	  --menu "Quel est votre choix" 12 54 5 \
-	  "1" "$choix13" \
-	  "2" "$choix14" \
-	  "3" "$choix15" \
-	  "4" "$choix16" \
-	  "5" "\Z4Retour\Zn" 2> $fichtemp
+	  --default-item "6" \
+	  --menu "Quel est votre choix" 14 54 6 \
+	  "1" "$choix14" \
+	  "2" "$choix15" \
+	  "3" "$choix16" \
+	  "4" "$choix17" \
+	  "5" "$choix18" \
+	  "6" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
 choix=`cat $fichtemp`
 case $valret in
 
- 0)	# Installation Centreon Engine
+ 0)	# Installation Centreon Clib
 	if [ "$choix" = "1" ]
+	then
+		rm -f $fichtemp
+		installation_centreon_clib
+	fi
+
+	# Installation Centreon Engine
+	if [ "$choix" = "2" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_engine
 	fi
 
 	# Installation Centreon Broker
-	if [ "$choix" = "2" ]
+	if [ "$choix" = "3" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_broker
 	fi
 
 	# Installation Centreon
-	if [ "$choix" = "3" ]
+	if [ "$choix" = "4" ]
 	then
 		rm -f $fichtemp
 		installation_centreon
 	fi
 
 	# Installation Centreon Widgets
-	if [ "$choix" = "4" ]
+	if [ "$choix" = "5" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_widgets
 	fi
 
 	# Retour
-	if [ "$choix" = "5" ]
+	if [ "$choix" = "6" ]
 	then
 		clear
 	fi
@@ -1495,6 +1576,35 @@ installation_composant_nrpe()
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant NRPE" \
 	  --gauge "Installation Composant NRPE" 10 62 0 \
+
+
+menu_installation_composant_complementaire
+}
+
+#############################################################################
+# Fonction Installation Composant Centreon Clib
+#############################################################################
+
+installation_composant_centreon_clib()
+{
+
+(
+
+ echo "20" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install build-essential"; echo "XXX"
+	apt-get -y install build-essential &> /dev/null
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install cmake"; echo "XXX"
+	apt-get -y install cmake &> /dev/null
+
+ echo "100" ; sleep 1
+ echo "XXX" ; echo "Terminer"; echo "XXX"
+ sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Composant Centreon Clib" \
+	  --gauge "Installation Composant Centreon Clib" 10 62 0 \
 
 
 menu_installation_composant_complementaire
@@ -3148,6 +3258,221 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 menu_installation_suite_nagios
+}
+
+#############################################################################
+# Fonction Installation Centreon Clib
+#############################################################################
+
+installation_centreon_clib()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+(
+ echo "10" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Installation Centreon Clib" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+	
+
+$DIALOG  --ok-label "Validation" \
+	  --nocancel \
+	  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --form "Quel est votre choix" 10 50 1 \
+	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+
+valret=$?
+choix_version=`cat $fichtemp`
+case $valret in
+
+ 0)    # Choix Version
+
+	cat <<- EOF > $fichtemp
+	select version
+	from application
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
+
+
+	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
+
+	rm -f /tmp/liste-version.txt
+	rm -f $fichtemp
+
+	else
+	cat <<- EOF > /tmp/erreur
+	Veuillez vous assurer que la version saisie
+	               est correcte
+	EOF
+
+	erreur=`cat /tmp/erreur`
+
+	$DIALOG --ok-label "Quitter" \
+		 --colors \
+		 --backtitle "Installation Centreon Clib" \
+		 --title "Erreur" \
+		 --msgbox  "\Z1$erreur\Zn" 6 50 
+	
+	rm -f /tmp/liste-version.txt
+	rm -f /tmp/erreur
+	rm -f $fichtemp
+	menu_installation_suite_centreon			
+	fi
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+esac
+
+(
+ echo "20" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Installation Centreon Clib" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select url
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
+
+	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
+	rm -f /tmp/url-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select fichier
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
+
+	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
+	rm -f /tmp/nom-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select repertoire
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
+
+	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
+	rm -f /tmp/nom-repertoire.txt
+	rm -f $fichtemp
+
+(
+ echo "40" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Telechargement en cours" 10 60 0 \
+
+	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
+
+(
+ echo "60" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Installation Centreon Clib" 10 60 0 \
+
+
+	#if [ -f $NrpePidFile ] ; then
+	#/etc/init.d/nrpe stop &> /dev/null
+	#fi
+
+	#groupadd centreon-broker
+	#useradd -g centreon-broker -m -r -d /var/lib/centreon-broker centreon-broker
+
+	tar xvzf $nom_fichier
+	cd $nom_repertoire
+	
+	#cmake \ 
+	#make
+	#make install
+
+	cd ..
+
+	#rm -rf /root/$nom_repertoire/
+	#rm -f /root/$nom_fichier
+
+(
+ echo "90" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Installation Centreon Clib" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into inventaire ( logiciel, version, uname, date, heure )
+	values ( 'centreon-clib' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table inventaire order by logiciel ;
+	alter table inventaire order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+(
+ echo "100" ; sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Clib" \
+	  --gauge "Terminer" 10 60 0 \
+
+
+menu_installation_suite_centreon
 }
 
 #############################################################################
