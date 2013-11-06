@@ -1355,7 +1355,7 @@ esac
 
 rm -f $fichtemp
 
-menu_installation_serveur_supervision
+menu_installation_composant_complementaire
 }
 
 #############################################################################
@@ -1533,7 +1533,7 @@ esac
 
 rm -f $fichtemp
 
-menu_installation_composant_complementaire
+menu_installation_serveur_supervision
 }
 
 #############################################################################
@@ -1877,6 +1877,10 @@ installation_composant_centreon_engine()
  echo "60" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libssl-dev"; echo "XXX"
 	apt-get -y install libssl-dev &> /dev/null
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libxerces-c-dev"; echo "XXX"
+	apt-get -y install libxerces-c-dev &> /dev/null
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
@@ -3703,6 +3707,434 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Centreon Clib" \
+	  --gauge "Terminer" 10 60 0 \
+
+
+menu_installation_suite_centreon
+}
+
+#############################################################################
+# Fonction Installation Centreon Perl Connector 
+#############################################################################
+
+installation_centreon_clib()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+(
+ echo "10" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+	
+
+$DIALOG  --ok-label "Validation" \
+	  --nocancel \
+	  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --form "Quel est votre choix" 10 50 1 \
+	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+
+valret=$?
+choix_version=`cat $fichtemp`
+case $valret in
+
+ 0)    # Choix Version
+
+	cat <<- EOF > $fichtemp
+	select version
+	from application
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
+
+
+	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
+
+	rm -f /tmp/liste-version.txt
+	rm -f $fichtemp
+
+	else
+	cat <<- EOF > /tmp/erreur
+	Veuillez vous assurer que la version saisie
+	               est correcte
+	EOF
+
+	erreur=`cat /tmp/erreur`
+
+	$DIALOG --ok-label "Quitter" \
+		 --colors \
+		 --backtitle "Installation Centreon Perl Connector" \
+		 --title "Erreur" \
+		 --msgbox  "\Z1$erreur\Zn" 6 50 
+	
+	rm -f /tmp/liste-version.txt
+	rm -f /tmp/erreur
+	rm -f $fichtemp
+	menu_installation_suite_centreon			
+	fi
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+esac
+
+(
+ echo "20" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select url
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
+
+	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
+	rm -f /tmp/url-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select fichier
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
+
+	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
+	rm -f /tmp/nom-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select repertoire
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
+
+	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
+	rm -f /tmp/nom-repertoire.txt
+	rm -f $fichtemp
+
+(
+ echo "40" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Telechargement en cours" 10 60 0 \
+
+	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
+
+(
+ echo "60" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+
+
+	tar xvzf $nom_fichier
+	cd $nom_repertoire/build
+	
+	cmake \
+		-DWITH_TESTING=0 \
+		-DWITH_PREFIX=/usr/local/centreon-clib \
+		-DWITH_SHARED_LIB=1 \
+		-DWITH_STATIC_LIB=0 \
+		-DWITH_PKGCONFIG_DIR=/usr/lib/pkgconfig .
+
+	make
+	make install
+
+	cd ../..
+
+	rm -rf /root/$nom_repertoire/
+	rm -f /root/$nom_fichier
+
+(
+ echo "90" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into inventaire ( logiciel, version, uname, date, heure )
+	values ( 'centreon-clib' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table inventaire order by logiciel ;
+	alter table inventaire order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+(
+ echo "100" ; sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Perl Connector" \
+	  --gauge "Terminer" 10 60 0 \
+
+
+menu_installation_suite_centreon
+}
+
+#############################################################################
+# Fonction Installation Centreon SSH Connector
+#############################################################################
+
+installation_centreon_ssh_connector()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+(
+ echo "10" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+	
+
+$DIALOG  --ok-label "Validation" \
+	  --nocancel \
+	  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --form "Quel est votre choix" 10 50 1 \
+	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+
+valret=$?
+choix_version=`cat $fichtemp`
+case $valret in
+
+ 0)    # Choix Version
+
+	cat <<- EOF > $fichtemp
+	select version
+	from application
+	where logiciel='centreon-clib' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
+
+
+	if grep -w "$choix_version" /tmp/liste-version.txt > /dev/null ; then
+
+	rm -f /tmp/liste-version.txt
+	rm -f $fichtemp
+
+	else
+	cat <<- EOF > /tmp/erreur
+	Veuillez vous assurer que la version saisie
+	               est correcte
+	EOF
+
+	erreur=`cat /tmp/erreur`
+
+	$DIALOG --ok-label "Quitter" \
+		 --colors \
+		 --backtitle "Installation Centreon SSH Connector" \
+		 --title "Erreur" \
+		 --msgbox  "\Z1$erreur\Zn" 6 50 
+	
+	rm -f /tmp/liste-version.txt
+	rm -f /tmp/erreur
+	rm -f $fichtemp
+	menu_installation_suite_centreon			
+	fi
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	rm -f $fichtemp
+	menu_installation_suite_centreon
+	;;
+
+esac
+
+(
+ echo "20" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	select url
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
+
+	url_fichier=$(sed '$!d' /tmp/url-fichier.txt)
+	rm -f /tmp/url-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select fichier
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
+
+	nom_fichier=$(sed '$!d' /tmp/nom-fichier.txt)
+	rm -f /tmp/nom-fichier.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select repertoire
+	from application
+	where logiciel='centreon-clib' and version='$choix_version' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
+
+	nom_repertoire=$(sed '$!d' /tmp/nom-repertoire.txt)
+	rm -f /tmp/nom-repertoire.txt
+	rm -f $fichtemp
+
+(
+ echo "40" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --gauge "Telechargement en cours" 10 60 0 \
+
+	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
+
+(
+ echo "60" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+
+
+	tar xvzf $nom_fichier
+	cd $nom_repertoire/build
+	
+	cmake \
+		-DWITH_TESTING=0 \
+		-DWITH_PREFIX=/usr/local/centreon-clib \
+		-DWITH_SHARED_LIB=1 \
+		-DWITH_STATIC_LIB=0 \
+		-DWITH_PKGCONFIG_DIR=/usr/lib/pkgconfig .
+
+	make
+	make install
+
+	cd ../..
+
+	rm -rf /root/$nom_repertoire/
+	rm -f /root/$nom_fichier
+
+(
+ echo "90" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
+	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into inventaire ( logiciel, version, uname, date, heure )
+	values ( 'centreon-clib' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table inventaire order by logiciel ;
+	alter table inventaire order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+(
+ echo "100" ; sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon SSH Connector" \
 	  --gauge "Terminer" 10 60 0 \
 
 
