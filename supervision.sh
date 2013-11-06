@@ -830,15 +830,15 @@ else
 	choix6="\Z2Installation Composant Centreon Clib\Zn" 
 fi
 
-if [ ! -f /usr/share/build-essential/list ] ||
-   [ ! -f /usr/bin/cmake ] ; then
+if [ ! -f /usr/lib/libperl.so ] ||
+   [ ! -d /usr/share/doc/libperl-dev ] ; then
 	choix7="\Z1Installation Composant Centreon Perl Connector\Zn" 
 else
 	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
 fi
 
-if [ ! -f /usr/share/build-essential/list ] ||
-   [ ! -f /usr/bin/cmake ] ; then
+if [ ! -f /usr/lib/libssh2.so ] ||
+   [ ! -f /usr/lib/libgcrypt.so ] ; then
 	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
 	choix8="\Z2Installation Composant Centreon SSH Connector\Zn" 
@@ -1400,14 +1400,14 @@ case $valret in
 	if [ "$choix" = "2" ]
 	then
 		rm -f $fichtemp
-		installation_composant_centreon_engine
+		installation_composant_centreon_perl_connector
 	fi
 
 	# Installation Composant Centreon SSH Connector
 	if [ "$choix" = "3" ]
 	then
 		rm -f $fichtemp
-		installation_composant_centreon_engine
+		installation_composant_centreon_ssh_connector
 	fi
 
 	# Installation Composant Centreon Engine
@@ -1678,8 +1678,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Nagios" \
 	  --gauge "Installation Composant Nagios" 10 62 0 \
 
-
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_nagios
 }
 
 #############################################################################
@@ -1731,8 +1730,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Nagios Plugins" \
 	  --gauge "Installation Composant Nagios Plugins" 10 62 0 \
 
-
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_nagios
 }
 
 #############################################################################
@@ -1764,8 +1762,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant NRPE" \
 	  --gauge "Installation Composant NRPE" 10 62 0 \
 
-
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_nagios
 }
 
 #############################################################################
@@ -1793,8 +1790,59 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Centreon Clib" \
 	  --gauge "Installation Composant Centreon Clib" 10 62 0 \
 
+menu_installation_composant_complementaire_centreon
+}
 
-menu_installation_composant_complementaire
+#############################################################################
+# Fonction Installation Composant Centreon Perl Connector
+#############################################################################
+
+installation_composant_centreon_perl_connector()
+{
+
+(
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libperl-dev"; echo "XXX"
+	apt-get -y install libperl-dev &> /dev/null
+
+ echo "100" ; sleep 1
+ echo "XXX" ; echo "Terminer"; echo "XXX"
+ sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Composant Centreon Perl Connector" \
+	  --gauge "Installation Composant Centreon Perl Connector" 10 62 0 \
+
+menu_installation_composant_complementaire_centreon
+}
+
+#############################################################################
+# Fonction Installation Composant Centreon SSH Connector
+#############################################################################
+
+installation_composant_centreon_ssh_connector()
+{
+
+(
+
+ echo "20" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libssh2-1-dev"; echo "XXX"
+	apt-get -y install libssh2-1-dev &> /dev/null
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libgcrypt11-dev"; echo "XXX"
+	apt-get -y install libgcrypt11-dev &> /dev/null
+
+ echo "100" ; sleep 1
+ echo "XXX" ; echo "Terminer"; echo "XXX"
+ sleep 2
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Composant Centreon SSH Connector" \
+	  --gauge "Installation Composant Centreon SSH Connector" 10 62 0 \
+
+menu_installation_composant_complementaire_centreon
 }
 
 #############################################################################
@@ -1838,7 +1886,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Centreon Engine" \
 	  --gauge "Installation Composant Centreon Engine" 10 62 0 \
 
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_centreon
 }
 
 #############################################################################
@@ -1882,7 +1930,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Centreon Broker" \
 	  --gauge "Installation Composant Centreon Broker" 10 62 0 \
 
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_centreon
 }
 
 #############################################################################
@@ -1934,7 +1982,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Composant Centreon" \
 	  --gauge "Installation Composant Centreon" 10 62 0 \
 
-menu_installation_composant_complementaire
+menu_installation_composant_complementaire_centreon
 }
 
 #############################################################################
