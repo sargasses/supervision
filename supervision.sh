@@ -388,7 +388,10 @@ if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-engine/bin/centengine ] ||
+   [ ! -f /usr/local/centreon-engine/etc/centengine.cfg ] ||
+   [ ! -f /usr/local/centreon-engine/lib/centreon-engine/webservice.so ] ||
+   [ ! -f /etc/init.d/centengine ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -719,7 +722,10 @@ if [ -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
 	rm -f $fichtemp
 fi
 
-if [ -d /usr/local/centreon/test ] ; then
+if [ -f /usr/local/centreon-engine/bin/centengine ] ||
+   [ -f /usr/local/centreon-engine/etc/centengine.cfg ] ||
+   [ -f /usr/local/centreon-engine/lib/centreon-engine/webservice.so ] ||
+   [ -f /etc/init.d/centengine ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1041,7 +1047,10 @@ else
 	choix18="\Z2Installation Centreon SSH Connector\Zn" 
 fi
 
-if [ ! -d /usr/local/centreon/test ] ; then
+if [ ! -f /usr/local/centreon-engine/bin/centengine ] ||
+   [ ! -f /usr/local/centreon-engine/etc/centengine.cfg ] ||
+   [ ! -f /usr/local/centreon-engine/lib/centreon-engine/webservice.so ] ||
+   [ ! -f /etc/init.d/centengine ] ; then
 	choix19="\Z1Installation Centreon Engine\Zn" 
 
 elif [ "$version_reference_centreon_engine" != "$version_installe_centreon_engine" ] ; then
@@ -1814,6 +1823,10 @@ installation_composant_nagios_plugins()
  echo "70" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libmcrypt-dev"; echo "XXX"
 	apt-get -y install libmcrypt-dev &> /dev/null
+
+ echo "80" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install fping"; echo "XXX"
+	apt-get -y install fping &> /dev/null
 
  echo "80" ; sleep 1
  echo "XXX" ; echo "apt-get -y install dnsutils"; echo "XXX"
