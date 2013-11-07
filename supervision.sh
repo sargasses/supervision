@@ -623,6 +623,62 @@ if [ -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 	rm -f $fichtemp
 fi
 
+if [ -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='centreon-perl-connector' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference_centreon_perl_connector=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+
+
+	cat <<- EOF > $fichtemp
+	select version
+	from inventaire
+	where logiciel='centreon-perl-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
+
+	version_installe_centreon_perl_connector=$(sed '$!d' /tmp/version-installe.txt)
+	rm -f /tmp/version-installe.txt
+	rm -f $fichtemp
+fi
+
+if [ -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='centreon-ssh-connector' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference_centreon_ssh_connector=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+
+
+	cat <<- EOF > $fichtemp
+	select version
+	from inventaire
+	where logiciel='centreon-ssh-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
+
+	version_installe_centreon_ssh_connector=$(sed '$!d' /tmp/version-installe.txt)
+	rm -f /tmp/version-installe.txt
+	rm -f $fichtemp
+fi
+
 if [ -d /usr/local/centreon/test ] ; then
 
 	cat <<- EOF > $fichtemp
@@ -925,20 +981,20 @@ else
 	choix16="\Z2Installation Centreon Clib\Zn" 
 fi
 
-if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
+if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
 	choix17="\Z1Installation Centreon Perl Connector\Zn" 
 
-elif [ "$version_reference_centreon_clib" != "$version_installe_centreon_clib" ] ; then
+elif [ "$version_reference_centreon_perl_connector" != "$version_installe_centreon_perl_connector" ] ; then
 	choix17="\Zb\Z3Installation Centreon Perl Connector\Zn" 
 
 else
 	choix17="\Z2Installation Centreon Perl Connector\Zn" 
 fi
 
-if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
+if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
 	choix18="\Z1Installation Centreon SSH Connector\Zn" 
 
-elif [ "$version_reference_centreon_clib" != "$version_installe_centreon_clib" ] ; then
+elif [ "$version_reference_centreon_ssh_connector" != "$version_installe_centreon_ssh_connector" ] ; then
 	choix18="\Zb\Z3Installation Centreon SSH Connector\Zn" 
 
 else
@@ -3717,7 +3773,7 @@ menu_installation_suite_centreon
 # Fonction Installation Centreon Perl Connector 
 #############################################################################
 
-installation_centreon_clib()
+installation_centreon_perl_connector()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -3732,7 +3788,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select version
 	from version
-	where logiciel='centreon-clib' ;
+	where logiciel='centreon-perl-connector' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
@@ -3758,7 +3814,7 @@ case $valret in
 	cat <<- EOF > $fichtemp
 	select version
 	from application
-	where logiciel='centreon-clib' ;
+	where logiciel='centreon-perl-connector' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
@@ -3814,7 +3870,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select url
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-perl-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
@@ -3826,7 +3882,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select fichier
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-perl-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
@@ -3838,7 +3894,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select repertoire
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-perl-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
@@ -3876,7 +3932,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	make
 	make install
 
-	cd ../..
+	cd ../../..
 
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
@@ -3890,7 +3946,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	where logiciel='centreon-perl-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -3899,7 +3955,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( logiciel, version, uname, date, heure )
-	values ( 'centreon-clib' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-perl-connector' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -3945,7 +4001,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select version
 	from version
-	where logiciel='centreon-clib' ;
+	where logiciel='centreon-ssh-connector' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
@@ -3971,7 +4027,7 @@ case $valret in
 	cat <<- EOF > $fichtemp
 	select version
 	from application
-	where logiciel='centreon-clib' ;
+	where logiciel='centreon-ssh-connector' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
@@ -4027,7 +4083,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select url
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-ssh-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
@@ -4039,7 +4095,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select fichier
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-ssh-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
@@ -4051,7 +4107,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select repertoire
 	from application
-	where logiciel='centreon-clib' and version='$choix_version' ;
+	where logiciel='centreon-ssh-connector' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
@@ -4083,13 +4139,13 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cmake \
 		-DWITH_PREFIX=/usr/local/centreon-connector \
 		-DWITH_CENTREON_CLIB_INCLUDE_DIR=/usr/local/centreon-clib/include \
-		-DWITH_CENTREON_CLIB_LIBRARY_DIR=/usr/local/centreon-clib/lib/libcentreon_clib.so  \
+		-DWITH_CENTREON_CLIB_LIBRARIES=/usr/local/centreon-clib/lib/libcentreon_clib.so \
 		-DWITH_TESTING=0 .
 
 	make
 	make install
 
-	cd ../..
+	cd ../../..
 
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
@@ -4103,7 +4159,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where logiciel='centreon-clib' and uname='`uname -n`' ;
+	where logiciel='centreon-ssh-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -4112,7 +4168,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( logiciel, version, uname, date, heure )
-	values ( 'centreon-clib' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-ssh-connector' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
