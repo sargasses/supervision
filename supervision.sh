@@ -1687,35 +1687,35 @@ case $valret in
 	fi
 
 	# Installation Centreon Engine
-	if [ "$choix" = "2" ]
+	if [ "$choix" = "4" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_engine
 	fi
 
 	# Installation Centreon Broker
-	if [ "$choix" = "3" ]
+	if [ "$choix" = "5" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_broker
 	fi
 
 	# Installation Centreon
-	if [ "$choix" = "4" ]
+	if [ "$choix" = "6" ]
 	then
 		rm -f $fichtemp
 		installation_centreon
 	fi
 
 	# Installation Centreon Widgets
-	if [ "$choix" = "5" ]
+	if [ "$choix" = "7" ]
 	then
 		rm -f $fichtemp
 		installation_centreon_widgets
 	fi
 
 	# Retour
-	if [ "$choix" = "6" ]
+	if [ "$choix" = "8" ]
 	then
 		clear
 	fi
