@@ -348,6 +348,46 @@ if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 	rm -f $fichtemp
 fi
 
+if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where logiciel='centreon-perl-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+	
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where logiciel='centreon-ssh-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+	
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
 if [ ! -d /usr/local/centreon/test ] ; then
 
 	cat <<- EOF > $fichtemp
@@ -1061,6 +1101,7 @@ menu()
 {
 
 lecture_config_centraliser
+nettoyage_table_installation
 inventaire_version_logiciel
 verification_installation
 
