@@ -3865,14 +3865,13 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 	tar xvzf $nom_fichier
-	cd $nom_repertoire/build
+	cd $nom_repertoire/perl/build
 	
 	cmake \
-		-DWITH_TESTING=0 \
-		-DWITH_PREFIX=/usr/local/centreon-clib \
-		-DWITH_SHARED_LIB=1 \
-		-DWITH_STATIC_LIB=0 \
-		-DWITH_PKGCONFIG_DIR=/usr/lib/pkgconfig .
+		-DWITH_PREFIX=/usr/local/centreon-connector \
+		-DWITH_CENTREON_CLIB_INCLUDE_DIR=/usr/local/centreon-clib/include \
+		-DWITH_CENTREON_CLIB_LIBRARIES=/usr/local/centreon-clib/lib/libcentreon_clib.so \
+		-DWITH_TESTING=0 .
 
 	make
 	make install
@@ -4079,14 +4078,13 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 	tar xvzf $nom_fichier
-	cd $nom_repertoire/build
+	cd $nom_repertoire/ssh/build
 	
 	cmake \
-		-DWITH_TESTING=0 \
-		-DWITH_PREFIX=/usr/local/centreon-clib \
-		-DWITH_SHARED_LIB=1 \
-		-DWITH_STATIC_LIB=0 \
-		-DWITH_PKGCONFIG_DIR=/usr/lib/pkgconfig .
+		-DWITH_PREFIX=/usr/local/centreon-connector \
+		-DWITH_CENTREON_CLIB_INCLUDE_DIR=/usr/local/centreon-clib/include \
+		-DWITH_CENTREON_CLIB_LIBRARY_DIR=/usr/local/centreon-clib/lib/libcentreon_clib.so  \
+		-DWITH_TESTING=0 .
 
 	make
 	make install
