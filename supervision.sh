@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 07-11-2013
+# Date : 08-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1828,7 +1828,7 @@ installation_composant_nagios_plugins()
  echo "XXX" ; echo "apt-get -y install fping"; echo "XXX"
 	apt-get -y install fping &> /dev/null
 
- echo "80" ; sleep 1
+ echo "90" ; sleep 1
  echo "XXX" ; echo "apt-get -y install dnsutils"; echo "XXX"
 	apt-get -y install dnsutils &> /dev/null
 
