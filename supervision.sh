@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 09-11-2013
+# Date : 11-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -4657,6 +4657,23 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f /root/$nom_fichier
 
 (
+ echo "80" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Broker" \
+	  --gauge "Installation Centreon Broker" 10 60 0 \
+
+
+	if [ ! -d /var/log/centreon-broker ] ; then
+	mkdir /var/log/centreon-broker
+	fi
+
+	chown centreon-broker:centreon-broker  /var/log/centreon-broker
+	chmod 775 /var/log/centreon-broker
+
+	chmod 775 /var/lib/centreon-broker
+
+(
  echo "90" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
@@ -5009,7 +5026,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	if grep "CENTREON_ENGINE_CONNECTORS" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
 		ligne=$(sed -n '/CENTREON_ENGINE_CONNECTORS/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
 		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
-		sed -i "$ligne"i'\CENTREON_ENGINE_CONNECTORS;Centreon Engine Connector path;0;0;/usr/local/centreon-connector' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\CENTREON_ENGINE_CONNECTOR;Centreon Engine Connector path;0;0;/usr/local/centreon-connector' /root/$nom_repertoire/www/install/var/engines/centreon-engine
 	fi
 
 	if grep "CENTREON_ENGINE_LIB" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
@@ -5044,9 +5061,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	fi
 
 	if grep "CENTREONBROKER_LIB" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
-		ligne=$(sed -n '/CENTREONBROKER_LIB/=' /root/$nom_repertoire/www/install/var/brokers/centreon-broker)
-		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
-		sed -i "$ligne"i'CENTREONBROKER_LIB;Centreon Broker lib (*.so) directory;1;0;/usr/local/centreon-broker/lib/centreon-broker' /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "s/usr\/share\/centreon\/lib\/centreon-broker/usr\/local\/centreon-engine\/lib\/centreon-engines/g" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
 	fi
 
 
