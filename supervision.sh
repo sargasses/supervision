@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 11-11-2013
+# Date : 15-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -22,6 +22,9 @@ FICHIER_CONFIG=config_centralisation_installation
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
 NrpePidFile=/var/run/nrpe/nrpe.pid
+
+CbdbrokerPidFile=/var/run/cbd_central-broker.pid
+CbdrrdPidFile=/var/run/cbd_central-rrd.pid
 CentcorePidFile=/var/run/centreon/centcore.pid
 CentstoragePidFile=/var/run/centreon/centstorage.pid
 
@@ -4629,9 +4632,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Broker" 10 60 0 \
 
 
-	#if [ -f $NrpePidFile ] ; then
-	#/etc/init.d/nrpe stop &> /dev/null
-	#fi
+	if [ -f $CbdbrokerPidFile ] || [ -f $CbdbrokerPidFile ] ; then	
+	/etc/init.d/cbd stop &> /dev/null
+	fi
 
 	groupadd -g 6002 centreon-broker
 	useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
@@ -4924,6 +4927,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	if [ -f $Ndo2dbPidFile ] ; then
 	/etc/init.d/ndo2db stop &> /dev/null
+	fi
+
+	if [ -f $CbdbrokerPidFile ] || [ -f $CbdbrokerPidFile ] ; then	
+	/etc/init.d/cbd stop &> /dev/null
 	fi
 
 	if [ -f $CentcorePidFile ] ; then
