@@ -5068,7 +5068,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	fi
 
 	if grep "CENTREONBROKER_LIB" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
-		sed -i "s/usr\/share\/centreon\/lib\/centreon-broker/usr\/local\/centreon-engine\/lib\/centreon-engines/g" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "s/usr\/share\/centreon\/lib\/centreon-broker/usr\/local\/centreon-broker\/lib\/centreon-broker/g" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
 	fi
 
 
@@ -5114,7 +5114,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	EOF
 
 	
-	./install.sh -i -f $fichtemp
+	#./install.sh -i -f $fichtemp
+	./install.sh -i
 
 	rm -f $fichtemp
 	
