@@ -23,6 +23,7 @@ NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
 NrpePidFile=/var/run/nrpe/nrpe.pid
 
+CentenginePidFile=/var/run/centengine.pid
 CbdbrokerPidFile=/var/run/cbd_central-broker.pid
 CbdrrdPidFile=/var/run/cbd_central-rrd.pid
 CentcorePidFile=/var/run/centreon/centcore.pid
