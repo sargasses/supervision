@@ -4410,9 +4410,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Engine" 10 60 0 \
 
 
-	#if [ -f $NrpePidFile ] ; then
-	#/etc/init.d/nrpe stop &> /dev/null
-	#fi
+	if [ -f $CentenginePidFile ] ; then
+	/etc/init.d/centengine stop &> /dev/null
+	fi
 
 	groupadd -g 6001 centreon-engine
 	useradd -u 6001 -g centreon-engine -m -r -d /var/lib/centreon-engine -c "Centreon-engine Admin" centreon-engine
@@ -4442,6 +4442,17 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
+
+(
+ echo "80" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Engine" \
+	  --gauge "Installation Daemon Centreon Engine en cours" 10 60 0 \
+
+	chmod 755 /etc/init.d/centengine
+
+	update-rc.d centengine defaults &> /dev/null
 
 (
  echo "90" ; sleep 1
@@ -4666,14 +4677,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
 
-(
- echo "80" ; sleep 1
-) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Centreon Broker" 10 60 0 \
-
-
 	if [ ! -d /var/log/centreon-broker ] ; then
 	mkdir /var/log/centreon-broker
 	fi
@@ -4682,6 +4685,17 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	chmod 775 /var/log/centreon-broker
 
 	chmod 775 /var/lib/centreon-broker
+
+(
+ echo "80" ; sleep 1
+) |
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --title "Installation Centreon Broker" \
+	  --gauge "Installation Daemon Centreon Broker en cours" 10 60 0 \
+
+	chmod 755 /etc/init.d/cbd
+
+	update-rc.d cbd defaults &> /dev/null
 
 (
  echo "90" ; sleep 1
@@ -4932,8 +4946,16 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Centreon" \
 	  --gauge "Installation Centreon" 10 60 0 \
 
+	if [ -f $NagiosLockFile ] ; then
+	/etc/init.d/nagios stop &> /dev/null
+	fi
+
 	if [ -f $Ndo2dbPidFile ] ; then
 	/etc/init.d/ndo2db stop &> /dev/null
+	fi
+
+	if [ -f $CentenginePidFile ] ; then
+	/etc/init.d/centengine stop &> /dev/null
 	fi
 
 	if [ -f $CbdbrokerPidFile ] || [ -f $CbdbrokerPidFile ] ; then	
