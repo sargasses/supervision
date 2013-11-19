@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 15-11-2013
+# Date : 19-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -906,6 +906,7 @@ fi
 
 if [ ! -f /usr/bin/fping ] ||
    [ ! -f /usr/bin/mkpasswd ] ||
+   [ ! -f /usr/include/gd.h ] ||
    [ ! -f /usr/include/libpng12/png.h ] ; then
 	choix3="\Z1Installation Composant Nagios\Zn" 
 else
@@ -1257,6 +1258,7 @@ menu
 menu_installation_serveur_supervision()
 {
 
+inventaire_version_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1401,6 +1403,7 @@ menu_installation_serveur_supervision
 menu_installation_composant_complementaire_nagios()
 {
 
+inventaire_version_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1474,6 +1477,7 @@ menu_installation_composant_complementaire
 menu_installation_composant_complementaire_centreon()
 {
 
+inventaire_version_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1571,6 +1575,7 @@ menu_installation_composant_complementaire
 menu_installation_suite_nagios()
 {
 
+inventaire_version_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1652,6 +1657,7 @@ menu_installation_serveur_supervision
 menu_installation_suite_centreon()
 {
 
+inventaire_version_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
