@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 19-11-2013
+# Date : 20-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
