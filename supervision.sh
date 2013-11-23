@@ -1631,7 +1631,7 @@ case $valret in
 		installation_composant_centreon_broker
 	fi
 
-	# Installation Composant Centreon
+	# Installation Composant Centreon Core
 	if [ "$choix" = "6" ]
 	then
 		rm -f $fichtemp
@@ -1812,11 +1812,11 @@ case $valret in
 		installation_centreon_broker
 	fi
 
-	# Installation Centreon
+	# Installation Centreon Core
 	if [ "$choix" = "6" ]
 	then
 		rm -f $fichtemp
-		installation_centreon
+		installation_centreon_core
 	fi
 
 	# Installation Centreon Widgets
@@ -5016,10 +5016,10 @@ menu_installation_suite_centreon
 }
 
 #############################################################################
-# Fonction Installation Centreon
+# Fonction Installation Centreon Core
 #############################################################################
 
-installation_centreon()
+installation_centreon_core()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -5028,8 +5028,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
  echo "10" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
-	  --gauge "Installation Centreon" 10 60 0 \
+	  --title "Installation Centreon Core" \
+	  --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -5047,7 +5047,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --ok-label "Validation" \
 	  --nocancel \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
+	  --title "Installation Centreon Core" \
 	  --form "Quel est votre choix" 10 50 1 \
 	  "Version:"  1 1  "$version_reference"   1 10 10 0  2> $fichtemp
 
@@ -5081,7 +5081,7 @@ case $valret in
 
 	$DIALOG --ok-label "Quitter" \
 		 --colors \
-		 --backtitle "Installation Centreon" \
+		 --backtitle "Installation Centreon Core" \
 		 --title "Erreur" \
 		 --msgbox  "\Z1$erreur\Zn" 6 50 
 	
@@ -5110,8 +5110,8 @@ esac
  echo "20" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
-	  --gauge "Installation Centreon" 10 60 0 \
+	  --title "Installation Centreon Core" \
+	  --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -5205,7 +5205,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "40" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
+	  --title "Installation Centreon Core" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
@@ -5216,8 +5216,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "60" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
-	  --gauge "Installation Centreon" 10 60 0 \
+	  --title "Installation Centreon Core" \
+	  --gauge "Installation Centreon Core" 10 60 0 \
 
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
@@ -5460,8 +5460,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "90" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
-	  --gauge "Installation Centreon" 10 60 0 \
+	  --title "Installation Centreon Core" \
+	  --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -5494,7 +5494,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "100" ; sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon" \
+	  --title "Installation Centreon Core" \
 	  --gauge "Terminer" 10 60 0 \
 
 
