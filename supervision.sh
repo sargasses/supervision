@@ -501,6 +501,18 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from composant
+	where composant='Centreon Clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_clib=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
 	where composant='Centreon Perl Connector' and uname='`uname -n`' ;
 	EOF
 
@@ -510,6 +522,53 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
+	where composant='Centreon SSH Connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_ssh_connector=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
+	where composant='Centreon Engine' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_engine=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
+	where composant='Centreon Broker' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_broker=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
+	where composant='Centreon Core' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_core=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
 
 }
 
@@ -957,7 +1016,8 @@ else
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
-   [ ! -f /usr/bin/cmake ] ; then
+   [ ! -f /usr/bin/cmake ] ||
+   [ "$composant_centreon_clib" != "Centreon Clib" ] ; then
 	choix6="\Z1Installation Composant Centreon Clib\Zn" 
 else
 	choix6="\Z2Installation Composant Centreon Clib\Zn" 
@@ -972,7 +1032,8 @@ else
 fi
 
 if [ ! -f /usr/lib/libssh2.so ] ||
-   [ ! -f /usr/lib/libgcrypt.so ] ; then
+   [ ! -f /usr/lib/libgcrypt.so ] ||
+   [ "$composant_centreon_ssh_connector" != "Centreon SSH Connector" ] ; then
 	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
 	choix8="\Z2Installation Composant Centreon SSH Connector\Zn" 
@@ -982,7 +1043,8 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -f /usr/bin/soapcpp2 ] ||
    [ ! -f /usr/include/zlib.h ] ||
-   [ ! -f /usr/include/openssl/aes.h ] ; then
+   [ ! -f /usr/include/openssl/aes.h ] ||
+   [ "$composant_centreon_engine" != "Centreon Engine" ] ; then
 	choix9="\Z1Installation Composant Centreon Engine\Zn" 
 else
 	choix9="\Z2Installation Composant Centreon Engine\Zn" 
@@ -991,7 +1053,8 @@ fi
 if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
-   [ ! -f /usr/lib/librrd.so ] ; then
+   [ ! -f /usr/lib/librrd.so ] ||
+   [ "$composant_centreon_broker" != "Centreon Broker" ] ; then
 	choix10="\Z1Installation Composant Centreon Broker\Zn" 
 else
 	choix10="\Z2Installation Composant Centreon Broker\Zn" 
@@ -1000,10 +1063,11 @@ fi
 if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
-   [ ! -f /usr/lib/perl5/XML/Parser.pm ] ; then
-	choix11="\Z1Installation Composant Centreon\Zn" 
+   [ ! -f /usr/lib/perl5/XML/Parser.pm ] ||
+   [ "$composant_centreon_core" != "Centreon Core" ] ; then
+	choix11="\Z1Installation Composant Centreon Core\Zn" 
 else
-	choix11="\Z2Installation Composant Centreon\Zn" 
+	choix11="\Z2Installation Composant Centreon Core\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/nagios ] ; then
@@ -1109,13 +1173,13 @@ if [ ! -f /etc/centreon/instCentCore.conf ] ||
    [ ! -f /etc/centreon/instCentPlugins.conf ] ||
    [ ! -f /etc/centreon/instCentStorage.conf ] ||
    [ ! -f /etc/centreon/instCentWeb.conf ] ; then
-	choix21="\Z1Installation Centreon\Zn"
+	choix21="\Z1Installation Centreon Core\Zn"
  
-elif [ "$version_reference_centreon" != "$version_installe_centreon" ] ; then
-	choix21="\Zb\Z3Installation Centreon\Zn" 
+elif [ "$version_reference_centreon_core" != "$version_installe_centreon_core" ] ; then
+	choix21="\Zb\Z3Installation Centreon Core\Zn" 
 
 else
-	choix21="\Z2Installation Centreon\Zn" 
+	choix21="\Z2Installation Centreon Core\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
@@ -1571,7 +1635,7 @@ case $valret in
 	if [ "$choix" = "6" ]
 	then
 		rm -f $fichtemp
-		installation_composant_centreon
+		installation_composant_centreon_core
 	fi
 
 	# Retour
@@ -1931,6 +1995,36 @@ installation_composant_centreon_clib()
  echo "XXX" ; echo "apt-get -y install cmake"; echo "XXX"
 	apt-get -y install cmake &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon Clib"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon Clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon Clib' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
@@ -2013,6 +2107,36 @@ installation_composant_centreon_ssh_connector()
  echo "XXX" ; echo "apt-get -y install libgcrypt11-dev"; echo "XXX"
 	apt-get -y install libgcrypt11-dev &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon SSH Connector"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon SSH Connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon SSH Connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
@@ -2061,6 +2185,36 @@ installation_composant_centreon_engine()
  echo "XXX" ; echo "apt-get -y install libxerces-c-dev"; echo "XXX"
 	apt-get -y install libxerces-c-dev &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon Engine"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon Engine' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon Engine' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
@@ -2105,6 +2259,36 @@ installation_composant_centreon_broker()
  echo "XXX" ; echo "apt-get -y install libgnutls28-dev"; echo "XXX"
 	apt-get -y install libgnutls28-dev &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon Broker"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon Broker' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon Broker' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
@@ -2117,10 +2301,10 @@ menu_installation_composant_complementaire_centreon
 }
 
 #############################################################################
-# Fonction Installation Composant Centreon
+# Fonction Installation Composant Centreon Core
 #############################################################################
 
-installation_composant_centreon()
+installation_composant_centreon_core()
 {
 
 (
@@ -2149,21 +2333,51 @@ installation_composant_centreon()
  echo "XXX" ; echo "apt-get -y install libnet-snmp-perl libsnmp-perl"; echo "XXX"
 	apt-get -y install libnet-snmp-perl libsnmp-perl &> /dev/null
 
- echo "80" ; sleep 1
+ echo "70" ; sleep 1
  echo "XXX" ; echo "apt-get -y install gettext"; echo "XXX"
 	apt-get -y install gettext &> /dev/null
 
- echo "90" ; sleep 1
+ echo "80" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libxml-parser-perl"; echo "XXX"
 	apt-get -y install libxml-parser-perl &> /dev/null
+
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon Core"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon Core' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon Core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon" \
-	  --gauge "Installation Composant Centreon" 10 62 0 \
+	  --title "Installation Composant Centreon Core" \
+	  --gauge "Installation Composant Centreon Core" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
