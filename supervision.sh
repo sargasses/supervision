@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 20-11-2013
+# Date : 23-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -487,6 +487,32 @@ fi
 
 }
 
+
+#############################################################################
+# Fonction Inventaire Composant
+#############################################################################
+
+inventaire_composant()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from composant
+	where composant='Centreon Perl Connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_centreon_perl_connector=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+
+}
+
 #############################################################################
 # Fonction Inventaire Version Logiciel
 #############################################################################
@@ -938,7 +964,8 @@ else
 fi
 
 if [ ! -f /usr/lib/libperl.so ] ||
-   [ ! -d /usr/share/doc/libperl-dev ] ; then
+   [ ! -d /usr/share/doc/libperl-dev ] ||
+   [ "$composant_centreon_perl_connector" != "Centreon Perl Connector" ] ; then
 	choix7="\Z1Installation Composant Centreon Perl Connector\Zn" 
 else
 	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
@@ -1404,6 +1431,7 @@ menu_installation_serveur_supervision
 menu_installation_composant_complementaire_nagios()
 {
 
+inventaire_composant
 inventaire_version_logiciel
 verification_installation
 
@@ -1478,6 +1506,7 @@ menu_installation_composant_complementaire
 menu_installation_composant_complementaire_centreon()
 {
 
+inventaire_composant
 inventaire_version_logiciel
 verification_installation
 
@@ -1922,9 +1951,39 @@ installation_composant_centreon_perl_connector()
 
 (
 
- echo "80" ; sleep 1
+ echo "20" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libperl-dev"; echo "XXX"
 	apt-get -y install libperl-dev &> /dev/null
+
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Centreon Perl Connector"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Centreon Perl Connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Centreon Perl Connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
