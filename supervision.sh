@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 23-11-2013
+# Date : 24-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1010,9 +1010,9 @@ fi
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/include/curl/curl.h ] ||
    [ ! -f /usr/include/openssl/ssl.h ] ; then
-	choix5="\Z1Installation Composant NRPE\Zn" 
+	choix5="\Z1Installation Composant Client NRPE\Zn" 
 else
-	choix5="\Z2Installation Composant NRPE\Zn" 
+	choix5="\Z2Installation Composant Client NRPE\Zn" 
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
@@ -1104,13 +1104,13 @@ else
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
-	choix15="\Z1Installation NRPE\Zn" 
+	choix15="\Z1Installation Client NRPE\Zn" 
 
 elif [ "$version_reference_nrpe" != "$version_installe_nrpe" ] ; then
-	choix15="\Zb\Z3Installation NRPE\Zn" 
+	choix15="\Zb\Z3Installation Client NRPE\Zn" 
 
 else
-	choix15="\Z2Installation NRPE\Zn" 
+	choix15="\Z2Installation Client NRPE\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
@@ -1713,11 +1713,11 @@ case $valret in
 		installation_ndoutils
 	fi
 
-	# Installation NRPE
+	# Installation Client NRPE
 	if [ "$choix" = "4" ]
 	then
 		rm -f $fichtemp
-		installation_nrpe
+		installation_client_nrpe
 	fi
 
 	# Retour
@@ -1879,6 +1879,36 @@ installation_composant_nagios()
  echo "XXX" ; echo "apt-get -y install linux-headers-`uname -r`"; echo "XXX"
 	apt-get -y install linux-headers-`uname -r` &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Nagios"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Nagios' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Nagios' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
@@ -1928,12 +1958,38 @@ installation_composant_nagios_plugins()
 	apt-get -y install libmcrypt-dev &> /dev/null
 
  echo "80" ; sleep 1
- echo "XXX" ; echo "apt-get -y install fping"; echo "XXX"
-	apt-get -y install fping &> /dev/null
+ echo "XXX" ; echo "apt-get -y install fping dnsutils"; echo "XXX"
+	apt-get -y install fping dnsutils &> /dev/null
 
  echo "90" ; sleep 1
- echo "XXX" ; echo "apt-get -y install dnsutils"; echo "XXX"
-	apt-get -y install dnsutils &> /dev/null
+ echo "XXX" ; echo "Installation Composant Nagios Plugins"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Nagios Plugins' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Nagios Plugins' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
 
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
@@ -1947,10 +2003,10 @@ menu_installation_composant_complementaire_nagios
 }
 
 #############################################################################
-# Fonction Installation Composant NRPE
+# Fonction Installation Composant Client NRPE
 #############################################################################
 
-installation_composant_nrpe()
+installation_composant_client_nrpe()
 {
 
 (
@@ -1967,13 +2023,43 @@ installation_composant_nrpe()
  echo "XXX" ; echo "apt-get -y install libssl-dev"; echo "XXX"
 	apt-get -y install libssl-dev &> /dev/null
 
+ echo "90" ; sleep 1
+ echo "XXX" ; echo "Installation Composant Client NRPE"; echo "XXX"
+
+	cat <<- EOF > $fichtemp
+	delete from composant
+	where composant='Client NRPE' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	insert into composant ( composant, uname, date, heure )
+	values ( 'Client NRPE' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	alter table composant order by composant ;
+	alter table composant order by uname ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
  echo "100" ; sleep 1
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant NRPE" \
-	  --gauge "Installation Composant NRPE" 10 62 0 \
+	  --title "Installation Composant Client NRPE" \
+	  --gauge "Installation Composant Client NRPE" 10 62 0 \
 
 menu_installation_composant_complementaire_nagios
 }
@@ -3553,10 +3639,10 @@ menu_installation_suite_nagios
 }
 
 #############################################################################
-# Fonction Installation NRPE
+# Fonction Installation Client NRPE
 #############################################################################
 
-installation_nrpe()
+installation_client_nrpe()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -3565,8 +3651,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
  echo "10" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+	  --title "Installation Client NRPE" \
+	  --gauge "Installation Client NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3584,7 +3670,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --ok-label "Validation" \
 	  --nocancel \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
+	  --title "Installation Client NRPE" \
 	  --form "Quel est votre choix" 10 50 1 \
 	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
@@ -3618,7 +3704,7 @@ case $valret in
 
 	$DIALOG --ok-label "Quitter" \
 		 --colors \
-		 --backtitle "Installation NRPE" \
+		 --backtitle "Installation Client NRPE" \
 		 --title "Erreur" \
 		 --msgbox  "\Z1$erreur\Zn" 6 50 
 	
@@ -3647,8 +3733,8 @@ esac
  echo "20" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+	  --title "Installation Client NRPE" \
+	  --gauge "Installation Client NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -3690,7 +3776,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "40" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
+	  --title "Installation Client NRPE" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
@@ -3699,8 +3785,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "60" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+	  --title "Installation Client NRPE" \
+	  --gauge "Installation Client NRPE" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
 		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
@@ -3733,7 +3819,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 $DIALOG  --ok-label "Validation" \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
+	  --title "Installation Client NRPE" \
 	  --form "Quel est votre choix" 8 60 0 \
 	  "Serveur Nagios:" 1 1 "192.168.4.60"  1 17 36 0 2> $fichtemp
 
@@ -3784,7 +3870,7 @@ esac
  echo "80" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
+	  --title "Installation Client NRPE" \
 	  --gauge "Installation Daemon NRPE en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/nrpe
@@ -3851,8 +3937,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "90" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+	  --title "Installation Client NRPE" \
+	  --gauge "Installation Client NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3885,7 +3971,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "100" ; sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
+	  --title "Installation Client NRPE" \
 	  --gauge "Terminer" 10 60 0 \
 
 
