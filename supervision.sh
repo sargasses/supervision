@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 24-11-2013
+# Date : 25-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -500,8 +500,44 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon Clib' and uname='`uname -n`' ;
+	from inventaire
+	where composant='nagios_core' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_nagios_core=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from inventaire
+	where composant='nagios_plugins' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_nagios_plugins=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from inventaire
+	where composant='nrpe' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
+
+	composant_nrpe=$(sed '$!d' /tmp/composant.txt)
+	rm -f /tmp/composant.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select composant
+	from inventaire
+	where composant='centreon_clib' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -512,8 +548,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon Perl Connector' and uname='`uname -n`' ;
+	from inventaire
+	where composant='centreon_perl_connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -524,8 +560,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon SSH Connector' and uname='`uname -n`' ;
+	from inventaire
+	where composant='centreon_ssh_connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -536,8 +572,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon Engine' and uname='`uname -n`' ;
+	from inventaire
+	where composant='centreon_engine' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -548,8 +584,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon Broker' and uname='`uname -n`' ;
+	from inventaire
+	where composant='centreon_broker' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -560,8 +596,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 	cat <<- EOF > $fichtemp
 	select composant
-	from composant
-	where composant='Centreon Core' and uname='`uname -n`' ;
+	from inventaire
+	where composant='centreon_core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -993,15 +1029,17 @@ fi
 if [ ! -f /usr/bin/fping ] ||
    [ ! -f /usr/bin/mkpasswd ] ||
    [ ! -f /usr/include/gd.h ] ||
-   [ ! -f /usr/include/libpng12/png.h ] ; then
-	choix3="\Z1Installation Composant Nagios\Zn" 
+   [ ! -f /usr/include/libpng12/png.h ] ||
+   [ "$composant_nagios_core" != "nagios_core" ] ; then
+	choix3="\Z1Installation Composant Nagios Core\Zn" 
 else
-	choix3="\Z2Installation Composant Nagios\Zn" 
+	choix3="\Z2Installation Composant Nagios Core\Zn" 
 fi
 
 if [ ! -f /usr/include/gnutls/gnutls.h ] ||
    [ ! -f /usr/include/krb5.h ] ||
-   [ ! -f /usr/lib/libmcrypt.so ] ; then
+   [ ! -f /usr/lib/libmcrypt.so ] ||
+   [ "$composant_nagios_plugins" != "nagios_plugins" ] ; then
 	choix4="\Z1Installation Composant Nagios Plugins\Zn" 
 else
 	choix4="\Z2Installation Composant Nagios Plugins\Zn" 
@@ -1009,15 +1047,16 @@ fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/include/curl/curl.h ] ||
-   [ ! -f /usr/include/openssl/ssl.h ] ; then
-	choix5="\Z1Installation Composant Client NRPE\Zn" 
+   [ ! -f /usr/include/openssl/ssl.h ] ||
+   [ "$composant_nrpe" != "nrpe" ] ; then
+	choix5="\Z1Installation Composant NRPE\Zn" 
 else
-	choix5="\Z2Installation Composant Client NRPE\Zn" 
+	choix5="\Z2Installation Composant NRPE\Zn" 
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/bin/cmake ] ||
-   [ "$composant_centreon_clib" != "Centreon Clib" ] ; then
+   [ "$composant_centreon_clib" != "centreon_clib" ] ; then
 	choix6="\Z1Installation Composant Centreon Clib\Zn" 
 else
 	choix6="\Z2Installation Composant Centreon Clib\Zn" 
@@ -1025,7 +1064,7 @@ fi
 
 if [ ! -f /usr/lib/libperl.so ] ||
    [ ! -d /usr/share/doc/libperl-dev ] ||
-   [ "$composant_centreon_perl_connector" != "Centreon Perl Connector" ] ; then
+   [ "$composant_centreon_perl_connector" != "centreon_perl_connector" ] ; then
 	choix7="\Z1Installation Composant Centreon Perl Connector\Zn" 
 else
 	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
@@ -1033,7 +1072,7 @@ fi
 
 if [ ! -f /usr/lib/libssh2.so ] ||
    [ ! -f /usr/lib/libgcrypt.so ] ||
-   [ "$composant_centreon_ssh_connector" != "Centreon SSH Connector" ] ; then
+   [ "$composant_centreon_ssh_connector" != "centreon_ssh_connector" ] ; then
 	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
 	choix8="\Z2Installation Composant Centreon SSH Connector\Zn" 
@@ -1044,7 +1083,7 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -f /usr/bin/soapcpp2 ] ||
    [ ! -f /usr/include/zlib.h ] ||
    [ ! -f /usr/include/openssl/aes.h ] ||
-   [ "$composant_centreon_engine" != "Centreon Engine" ] ; then
+   [ "$composant_centreon_engine" != "centreon_engine" ] ; then
 	choix9="\Z1Installation Composant Centreon Engine\Zn" 
 else
 	choix9="\Z2Installation Composant Centreon Engine\Zn" 
@@ -1054,7 +1093,7 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
    [ ! -f /usr/lib/librrd.so ] ||
-   [ "$composant_centreon_broker" != "Centreon Broker" ] ; then
+   [ "$composant_centreon_broker" != "centreon_broker" ] ; then
 	choix10="\Z1Installation Composant Centreon Broker\Zn" 
 else
 	choix10="\Z2Installation Composant Centreon Broker\Zn" 
@@ -1064,20 +1103,20 @@ if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
    [ ! -f /usr/lib/perl5/XML/Parser.pm ] ||
-   [ "$composant_centreon_core" != "Centreon Core" ] ; then
+   [ "$composant_centreon_core" != "centreon_core" ] ; then
 	choix11="\Z1Installation Composant Centreon Core\Zn" 
 else
 	choix11="\Z2Installation Composant Centreon Core\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/nagios ] ; then
-	choix12="\Z1Installation Nagios\Zn" 
+	choix12="\Z1Installation Nagios Core\Zn" 
 
 elif [ "$version_reference_nagios" != "$version_installe_nagios" ] ; then
-	choix12="\Zb\Z3Installation Nagios\Zn" 
+	choix12="\Zb\Z3Installation Nagios Core\Zn" 
 
 else
-	choix12="\Z2Installation Nagios\Zn" 
+	choix12="\Z2Installation Nagios Core\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
@@ -1104,13 +1143,13 @@ else
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
-	choix15="\Z1Installation Client NRPE\Zn" 
+	choix15="\Z1Installation NRPE\Zn" 
 
 elif [ "$version_reference_nrpe" != "$version_installe_nrpe" ] ; then
-	choix15="\Zb\Z3Installation Client NRPE\Zn" 
+	choix15="\Zb\Z3Installation NRPE\Zn" 
 
 else
-	choix15="\Z2Installation Client NRPE\Zn" 
+	choix15="\Z2Installation NRPE\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
@@ -1518,11 +1557,11 @@ valret=$?
 choix=`cat $fichtemp`
 case $valret in
 
- 0)	# Installation Composant Nagios
+ 0)	# Installation Composant Nagios Core
 	if [ "$choix" = "1" ]
 	then
 		rm -f $fichtemp
-		installation_composant_nagios
+		installation_composant_nagios_core
 	fi
 
 	# Installation Composant Nagios Plugins
@@ -1692,11 +1731,11 @@ valret=$?
 choix=`cat $fichtemp`
 case $valret in
 
- 0)	# Installation Nagios
+ 0)	# Installation Nagios Core
 	if [ "$choix" = "1" ]
 	then
 		rm -f $fichtemp
-		installation_nagios
+		installation_nagios_core
 	fi
 
 	# Installation Nagios Plugins
@@ -1713,11 +1752,11 @@ case $valret in
 		installation_ndoutils
 	fi
 
-	# Installation Client NRPE
+	# Installation NRPE
 	if [ "$choix" = "4" ]
 	then
 		rm -f $fichtemp
-		installation_client_nrpe
+		installation_nrpe
 	fi
 
 	# Retour
@@ -1854,7 +1893,7 @@ menu_installation_serveur_supervision
 # Fonction Installation Composant Nagios
 #############################################################################
 
-installation_composant_nagios()
+installation_composant_nagios_core()
 {
 
 (
@@ -1880,11 +1919,11 @@ installation_composant_nagios()
 	apt-get -y install linux-headers-`uname -r` &> /dev/null
 
  echo "90" ; sleep 1
- echo "XXX" ; echo "Installation Composant Nagios"; echo "XXX"
+ echo "XXX" ; echo "Installation Composant Nagios Core"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Nagios' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='nagios_core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1892,8 +1931,8 @@ installation_composant_nagios()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Nagios' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'nagios_core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1901,8 +1940,8 @@ installation_composant_nagios()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1965,8 +2004,8 @@ installation_composant_nagios_plugins()
  echo "XXX" ; echo "Installation Composant Nagios Plugins"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Nagios Plugins' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='nagios_plugins' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1974,8 +2013,8 @@ installation_composant_nagios_plugins()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Nagios Plugins' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'nagios_plugins' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1983,8 +2022,8 @@ installation_composant_nagios_plugins()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2003,10 +2042,10 @@ menu_installation_composant_complementaire_nagios
 }
 
 #############################################################################
-# Fonction Installation Composant Client NRPE
+# Fonction Installation Composant NRPE
 #############################################################################
 
-installation_composant_client_nrpe()
+installation_composant_nrpe()
 {
 
 (
@@ -2024,11 +2063,11 @@ installation_composant_client_nrpe()
 	apt-get -y install libssl-dev &> /dev/null
 
  echo "90" ; sleep 1
- echo "XXX" ; echo "Installation Composant Client NRPE"; echo "XXX"
+ echo "XXX" ; echo "Installation Composant NRPE"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Client NRPE' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='nrpe' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2036,8 +2075,8 @@ installation_composant_client_nrpe()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Client NRPE' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'nrpe' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2045,8 +2084,8 @@ installation_composant_client_nrpe()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2058,8 +2097,8 @@ installation_composant_client_nrpe()
  sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Client NRPE" \
-	  --gauge "Installation Composant Client NRPE" 10 62 0 \
+	  --title "Installation Composant NRPE" \
+	  --gauge "Installation Composant NRPE" 10 62 0 \
 
 menu_installation_composant_complementaire_nagios
 }
@@ -2085,8 +2124,8 @@ installation_composant_centreon_clib()
  echo "XXX" ; echo "Installation Composant Centreon Clib"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon Clib' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_clib' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2094,8 +2133,8 @@ installation_composant_centreon_clib()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon Clib' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_clib' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2103,8 +2142,8 @@ installation_composant_centreon_clib()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2139,8 +2178,8 @@ installation_composant_centreon_perl_connector()
  echo "XXX" ; echo "Installation Composant Centreon Perl Connector"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon Perl Connector' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_perl_connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2148,8 +2187,8 @@ installation_composant_centreon_perl_connector()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon Perl Connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_perl_connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2157,8 +2196,8 @@ installation_composant_centreon_perl_connector()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2197,8 +2236,8 @@ installation_composant_centreon_ssh_connector()
  echo "XXX" ; echo "Installation Composant Centreon SSH Connector"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon SSH Connector' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_ssh_connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2206,8 +2245,8 @@ installation_composant_centreon_ssh_connector()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon SSH Connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_ssh_connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2215,8 +2254,8 @@ installation_composant_centreon_ssh_connector()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2275,8 +2314,8 @@ installation_composant_centreon_engine()
  echo "XXX" ; echo "Installation Composant Centreon Engine"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon Engine' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_engine' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2284,8 +2323,8 @@ installation_composant_centreon_engine()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon Engine' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_engine' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2293,8 +2332,8 @@ installation_composant_centreon_engine()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2349,8 +2388,8 @@ installation_composant_centreon_broker()
  echo "XXX" ; echo "Installation Composant Centreon Broker"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon Broker' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_broker' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2358,8 +2397,8 @@ installation_composant_centreon_broker()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon Broker' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_broker' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2367,8 +2406,8 @@ installation_composant_centreon_broker()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2431,8 +2470,8 @@ installation_composant_centreon_core()
  echo "XXX" ; echo "Installation Composant Centreon Core"; echo "XXX"
 
 	cat <<- EOF > $fichtemp
-	delete from composant
-	where composant='Centreon Core' and uname='`uname -n`' ;
+	delete from inventaire
+	where composant='centreon_core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2440,8 +2479,8 @@ installation_composant_centreon_core()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	insert into composant ( composant, uname, date, heure )
-	values ( 'Centreon Core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	insert into inventaire ( composant, uname, date, heure )
+	values ( 'centreon_core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2449,8 +2488,8 @@ installation_composant_centreon_core()
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	alter table composant order by composant ;
-	alter table composant order by uname ;
+	alter table inventaire order by composant ;
+	alter table inventaire order by uname ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2666,10 +2705,10 @@ menu_installation_serveur_supervision
 }
 
 #############################################################################
-# Fonction Installation Nagios
+# Fonction Installation Nagios Core
 #############################################################################
 
-installation_nagios()
+installation_nagios_core()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -2678,8 +2717,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
  echo "10" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
-	  --gauge "Installation Nagios" 10 60 0 \
+	  --title "Installation Nagios Core" \
+	  --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -2697,7 +2736,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --ok-label "Validation" \
 	  --nocancel \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
+	  --title "Installation Nagios Core" \
 	  --form "Quel est votre choix" 10 50 1 \
 	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
@@ -2731,7 +2770,7 @@ case $valret in
 
 	$DIALOG --ok-label "Quitter" \
 		 --colors \
-		 --backtitle "Installation Nagios" \
+		 --backtitle "Installation Nagios Core" \
 		 --title "Erreur" \
 		 --msgbox  "\Z1$erreur\Zn" 6 50 
 	
@@ -2760,8 +2799,8 @@ esac
  echo "20" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
-	  --gauge "Installation Nagios" 10 60 0 \
+	  --title "Installation Nagios Core" \
+	  --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -2803,7 +2842,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "40" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
+	  --title "Installation Nagios Core" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
@@ -2812,8 +2851,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "60" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
-	  --gauge "Installation Nagios" 10 60 0 \
+	  --title "Installation Nagios Core" \
+	  --gauge "Installation Nagios Core" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
 		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
@@ -2849,7 +2888,7 @@ if [ "$choix_version" != "3.2.3" ] ; then
 $DIALOG  --ok-label "Validation" \
 	  --nocancel \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
+	  --title "Installation Nagios Core" \
 	  --default-item "1" \
 	  --menu "Choix de l'interface Web de Nagios" 10 40 2 \
 	  "1" "Interface Web Classique" \
@@ -2903,7 +2942,7 @@ fi
  echo "80" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
+	  --title "Installation Nagios Core" \
 	  --gauge "Installation Daemon Nagios en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/nagios
@@ -3004,8 +3043,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "90" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
-	  --gauge "Installation Nagios" 10 60 0 \
+	  --title "Installation Nagios Core" \
+	  --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3038,7 +3077,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "100" ; sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios" \
+	  --title "Installation Nagios Core" \
 	  --gauge "Terminer" 10 60 0 \
 
 
@@ -3639,10 +3678,10 @@ menu_installation_suite_nagios
 }
 
 #############################################################################
-# Fonction Installation Client NRPE
+# Fonction Installation NRPE
 #############################################################################
 
-installation_client_nrpe()
+installation_nrpe()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -3651,8 +3690,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
  echo "10" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
-	  --gauge "Installation Client NRPE" 10 60 0 \
+	  --title "Installation NRPE" \
+	  --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3704,7 +3743,7 @@ case $valret in
 
 	$DIALOG --ok-label "Quitter" \
 		 --colors \
-		 --backtitle "Installation Client NRPE" \
+		 --backtitle "Installation NRPE" \
 		 --title "Erreur" \
 		 --msgbox  "\Z1$erreur\Zn" 6 50 
 	
@@ -3722,7 +3761,7 @@ case $valret in
 	;;
 
  255)	# Appuyé sur Touche Echap
-	echo "Appuyé sur Touche Echap."
+	echo "Appuyé sur Touche chap."
 	rm -f $fichtemp
 	menu_installation_suite_nagios
 	;;
@@ -3733,8 +3772,8 @@ esac
  echo "20" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
-	  --gauge "Installation Client NRPE" 10 60 0 \
+	  --title "Installation NRPE" \
+	  --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -3776,7 +3815,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "40" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
+	  --title "Installation NRPE" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
@@ -3785,8 +3824,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "60" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
-	  --gauge "Installation Client NRPE" 10 60 0 \
+	  --title "Installation NRPE" \
+	  --gauge "Installation NRPE" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
 		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
@@ -3819,7 +3858,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 $DIALOG  --ok-label "Validation" \
 	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
+	  --title "Installation NRPE" \
 	  --form "Quel est votre choix" 8 60 0 \
 	  "Serveur Nagios:" 1 1 "192.168.4.60"  1 17 36 0 2> $fichtemp
 
@@ -3870,7 +3909,7 @@ esac
  echo "80" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
+	  --title "Installation NRPE" \
 	  --gauge "Installation Daemon NRPE en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/nrpe
@@ -3937,8 +3976,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "90" ; sleep 1
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
-	  --gauge "Installation Client NRPE" 10 60 0 \
+	  --title "Installation NRPE" \
+	  --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3971,7 +4010,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
  echo "100" ; sleep 2
 ) |
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
+	  --title "Installation NRPE" \
 	  --gauge "Terminer" 10 60 0 \
 
 
