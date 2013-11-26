@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 25-11-2013
+# Date : 26-11-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -234,6 +234,206 @@ if [ ! -f /usr/bin/smistrip ] ||
 	cat <<- EOF > $fichtemp
 	delete from inventaire
 	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/bin/fping ] ||
+   [ ! -f /usr/bin/mkpasswd ] ||
+   [ ! -f /usr/include/gd.h ] ||
+   [ ! -f /usr/include/libpng12/png.h ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='nagios-core' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/include/gnutls/gnutls.h ] ||
+   [ ! -f /usr/include/krb5.h ] ||
+   [ ! -f /usr/lib/libmcrypt.so ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='nagios-plugins' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/share/build-essential/list ] ||
+   [ ! -f /usr/include/curl/curl.h ] ||
+   [ ! -f /usr/include/openssl/ssl.h ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='nrpe' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/share/build-essential/list ] ||
+   [ ! -f /usr/bin/cmake ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-clib' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/lib/libperl.so ] ||
+   [ ! -d /usr/share/doc/libperl-dev ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-perl-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/lib/libssh2.so ] ||
+   [ ! -f /usr/lib/libgcrypt.so ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-ssh-connector' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/bin/cmake ] ||
+   [ ! -d /usr/include/qt4 ] ||
+   [ ! -f /usr/bin/soapcpp2 ] ||
+   [ ! -f /usr/include/zlib.h ] ||
+   [ ! -f /usr/include/openssl/aes.h ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-engine' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/bin/cmake ] ||
+   [ ! -d /usr/include/qt4 ] ||
+   [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
+   [ ! -f /usr/lib/librrd.so ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-broker' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table inventaire ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
+   [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
+   [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
+   [ ! -f /usr/lib/perl5/XML/Parser.pm ] ; then
+
+	cat <<- EOF > $fichtemp
+	delete from inventaire
+	where composant='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -501,7 +701,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='nagios_core' and uname='`uname -n`' ;
+	where composant='nagios-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -513,7 +713,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='nagios_plugins' and uname='`uname -n`' ;
+	where composant='nagios-plugins' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -537,7 +737,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_clib' and uname='`uname -n`' ;
+	where composant='centreon-clib' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -549,7 +749,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_perl_connector' and uname='`uname -n`' ;
+	where composant='centreon-perl-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -561,7 +761,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_ssh_connector' and uname='`uname -n`' ;
+	where composant='centreon-ssh-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -573,7 +773,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_engine' and uname='`uname -n`' ;
+	where composant='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -585,7 +785,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_broker' and uname='`uname -n`' ;
+	where composant='centreon-broker' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -597,7 +797,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
-	where composant='centreon_core' and uname='`uname -n`' ;
+	where composant='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/composant.txt
@@ -1030,7 +1230,7 @@ if [ ! -f /usr/bin/fping ] ||
    [ ! -f /usr/bin/mkpasswd ] ||
    [ ! -f /usr/include/gd.h ] ||
    [ ! -f /usr/include/libpng12/png.h ] ||
-   [ "$composant_nagios_core" != "nagios_core" ] ; then
+   [ "$composant_nagios_core" != "nagios-core" ] ; then
 	choix3="\Z1Installation Composant Nagios Core\Zn" 
 else
 	choix3="\Z2Installation Composant Nagios Core\Zn" 
@@ -1039,7 +1239,7 @@ fi
 if [ ! -f /usr/include/gnutls/gnutls.h ] ||
    [ ! -f /usr/include/krb5.h ] ||
    [ ! -f /usr/lib/libmcrypt.so ] ||
-   [ "$composant_nagios_plugins" != "nagios_plugins" ] ; then
+   [ "$composant_nagios_plugins" != "nagios-plugins" ] ; then
 	choix4="\Z1Installation Composant Nagios Plugins\Zn" 
 else
 	choix4="\Z2Installation Composant Nagios Plugins\Zn" 
@@ -1056,7 +1256,7 @@ fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/bin/cmake ] ||
-   [ "$composant_centreon_clib" != "centreon_clib" ] ; then
+   [ "$composant_centreon_clib" != "centreon-clib" ] ; then
 	choix6="\Z1Installation Composant Centreon Clib\Zn" 
 else
 	choix6="\Z2Installation Composant Centreon Clib\Zn" 
@@ -1064,7 +1264,7 @@ fi
 
 if [ ! -f /usr/lib/libperl.so ] ||
    [ ! -d /usr/share/doc/libperl-dev ] ||
-   [ "$composant_centreon_perl_connector" != "centreon_perl_connector" ] ; then
+   [ "$composant_centreon_perl_connector" != "centreon-perl-connector" ] ; then
 	choix7="\Z1Installation Composant Centreon Perl Connector\Zn" 
 else
 	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
@@ -1072,7 +1272,7 @@ fi
 
 if [ ! -f /usr/lib/libssh2.so ] ||
    [ ! -f /usr/lib/libgcrypt.so ] ||
-   [ "$composant_centreon_ssh_connector" != "centreon_ssh_connector" ] ; then
+   [ "$composant_centreon_ssh_connector" != "centreon-ssh-connector" ] ; then
 	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
 	choix8="\Z2Installation Composant Centreon SSH Connector\Zn" 
@@ -1083,7 +1283,7 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -f /usr/bin/soapcpp2 ] ||
    [ ! -f /usr/include/zlib.h ] ||
    [ ! -f /usr/include/openssl/aes.h ] ||
-   [ "$composant_centreon_engine" != "centreon_engine" ] ; then
+   [ "$composant_centreon_engine" != "centreon-engine" ] ; then
 	choix9="\Z1Installation Composant Centreon Engine\Zn" 
 else
 	choix9="\Z2Installation Composant Centreon Engine\Zn" 
@@ -1093,7 +1293,7 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/include/qt4 ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
    [ ! -f /usr/lib/librrd.so ] ||
-   [ "$composant_centreon_broker" != "centreon_broker" ] ; then
+   [ "$composant_centreon_broker" != "centreon-broker" ] ; then
 	choix10="\Z1Installation Composant Centreon Broker\Zn" 
 else
 	choix10="\Z2Installation Composant Centreon Broker\Zn" 
@@ -1103,7 +1303,7 @@ if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/GD/GD.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
    [ ! -f /usr/lib/perl5/XML/Parser.pm ] ||
-   [ "$composant_centreon_core" != "centreon_core" ] ; then
+   [ "$composant_centreon_core" != "centreon-core" ] ; then
 	choix11="\Z1Installation Composant Centreon Core\Zn" 
 else
 	choix11="\Z2Installation Composant Centreon Core\Zn" 
@@ -1923,7 +2123,7 @@ installation_composant_nagios_core()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='nagios_core' and uname='`uname -n`' ;
+	where composant='nagios-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1932,7 +2132,7 @@ installation_composant_nagios_core()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'nagios_core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'nagios-core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2005,7 +2205,7 @@ installation_composant_nagios_plugins()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='nagios_plugins' and uname='`uname -n`' ;
+	where composant='nagios-plugins' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2014,7 +2214,7 @@ installation_composant_nagios_plugins()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'nagios_plugins' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'nagios-plugins' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2125,7 +2325,7 @@ installation_composant_centreon_clib()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_clib' and uname='`uname -n`' ;
+	where composant='centreon-clib' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2134,7 +2334,7 @@ installation_composant_centreon_clib()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_clib' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-clib' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2179,7 +2379,7 @@ installation_composant_centreon_perl_connector()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_perl_connector' and uname='`uname -n`' ;
+	where composant='centreon-perl-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2188,7 +2388,7 @@ installation_composant_centreon_perl_connector()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_perl_connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-perl-connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2237,7 +2437,7 @@ installation_composant_centreon_ssh_connector()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_ssh_connector' and uname='`uname -n`' ;
+	where composant='centreon-ssh-connector' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2246,7 +2446,7 @@ installation_composant_centreon_ssh_connector()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_ssh_connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-ssh-connector' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2315,7 +2515,7 @@ installation_composant_centreon_engine()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_engine' and uname='`uname -n`' ;
+	where composant='centreon-engine' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2324,7 +2524,7 @@ installation_composant_centreon_engine()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_engine' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-engine' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2389,7 +2589,7 @@ installation_composant_centreon_broker()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_broker' and uname='`uname -n`' ;
+	where composant='centreon-broker' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2398,7 +2598,7 @@ installation_composant_centreon_broker()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_broker' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-broker' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2471,7 +2671,7 @@ installation_composant_centreon_core()
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where composant='centreon_core' and uname='`uname -n`' ;
+	where composant='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -2480,7 +2680,7 @@ installation_composant_centreon_core()
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( composant, uname, date, heure )
-	values ( 'centreon_core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-core' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
