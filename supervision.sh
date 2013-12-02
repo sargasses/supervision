@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 26-11-2013
+# Date : 02-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -3430,9 +3430,22 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
+$DIALOG  --ok-label "Validation" \
+	  --nocancel \
+	  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Nagios Plugins" \
-	  --gauge "Installation Nagios Plugins" 10 60 0 \
+	  --default-item "1" \
+	  --menu "Choix du moteur de Supervision" 10 40 2 \
+	  "1" "Nagios-Core" \
+	  "2" "Centreon-Engine" 2> $fichtemp
+
+valret=$?
+choix=`cat $fichtemp`
+case $valret in
+
+ 0)	# Interface Web Classique
+	if [ "$choix" = "1" ]
+	then
 
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
@@ -3450,7 +3463,31 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
 
-	/etc/init.d/nagios start &> /dev/null
+	/etc/init.d/nagios start &> /dev/null	
+	
+	fi
+
+	# Interface Web Exfoliation
+	if [ "$choix" = "2" ]
+	then
+		rm -f $fichtemp
+		make install-exfoliation &> /dev/null
+	fi
+	
+	;;
+
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	rm -f $fichtemp
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	rm -f $fichtemp
+	;;
+
+esac
 
 (
  echo "90" ; sleep 1
