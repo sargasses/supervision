@@ -3425,7 +3425,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Nagios Plugins" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
-	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
+	#wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
@@ -3435,9 +3435,9 @@ $DIALOG  --ok-label "Validation" \
 	  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Nagios Plugins" \
 	  --default-item "1" \
-	  --menu "Choix du moteur de Supervision" 10 40 2 \
-	  "1" "Nagios-Core" \
-	  "2" "Centreon-Engine" 2> $fichtemp
+	  --menu "Quel est votre choix" 10 68 2 \
+	  "1" "Installation Nagios Plugins Pour Nagios-Core" \
+	  "2" "Installation Nagios Plugins Pour Centreon-Engine" 2> $fichtemp
 
 valret=$?
 choix=`cat $fichtemp`
