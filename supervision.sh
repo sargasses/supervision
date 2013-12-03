@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 02-12-2013
+# Date : 03-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -469,9 +469,12 @@ if [ ! -f /usr/local/nagios/bin/nagios ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
-   [ ! -f /usr/local/nagios/libexec/check_fping ] ||
-   [ ! -f /usr/local/nagios/libexec/check_ssh ] ; then
+if [ ! -f /usr/local/nagios/libexec/check_ping ] &&
+   [ ! -f /usr/local/nagios/libexec/check_fping ] &&
+   [ ! -f /usr/local/nagios/libexec/check_ssh ] ||
+   [ ! -f /usr/local/centreon-plugins/libexec/check_ping ] &&
+   [ ! -f /usr/local/centreon-plugins/libexec/check_fping ] &&
+   [ ! -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -876,9 +879,12 @@ if [ -f /usr/local/nagios/bin/nagios ] ; then
 	rm -f $fichtemp
 fi
 
-if [ -f /usr/local/nagios/libexec/check_ping ] ||
-   [ -f /usr/local/nagios/libexec/check_fping ] ||
-   [ -f /usr/local/nagios/libexec/check_ssh ] ; then
+if [ -f /usr/local/nagios/libexec/check_ping ] &&
+   [ -f /usr/local/nagios/libexec/check_fping ] &&
+   [ -f /usr/local/nagios/libexec/check_ssh ] ||
+   [ -f /usr/local/centreon-plugins/libexec/check_ping ] &&
+   [ -f /usr/local/centreon-plugins/libexec/check_fping ] &&
+   [ -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1319,9 +1325,12 @@ else
 	choix12="\Z2Installation Nagios Core\Zn" 
 fi
 
-if [ ! -f /usr/local/nagios/libexec/check_ping ] ||
-   [ ! -f /usr/local/nagios/libexec/check_fping ] ||
-   [ ! -f /usr/local/nagios/libexec/check_ssh ] ; then
+if [ ! -f /usr/local/nagios/libexec/check_ping ] &&
+   [ ! -f /usr/local/nagios/libexec/check_fping ] &&
+   [ ! -f /usr/local/nagios/libexec/check_ssh ] ||
+   [ ! -f /usr/local/centreon-plugins/libexec/check_ping ] &&
+   [ ! -f /usr/local/centreon-plugins/libexec/check_fping ] &&
+   [ ! -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
 	choix13="\Z1Installation Nagios Plugins\Zn" 
 
 elif [ "$version_reference_nagios_plugins" != "$version_installe_nagios_plugins" ] ; then
@@ -3425,7 +3434,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Nagios Plugins" \
 	  --gauge "Telechargement en cours" 10 60 0 \
 
-	#wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
+	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
@@ -3443,7 +3452,7 @@ valret=$?
 choix=`cat $fichtemp`
 case $valret in
 
- 0)	# Interface Web Classique
+ 0)	# Installation Nagios Plugins Pour Nagios-Core
 	if [ "$choix" = "1" ]
 	then
 
@@ -3454,7 +3463,7 @@ case $valret in
 	tar xvzf $nom_fichier
 	cd $nom_repertoire
 	
-	./configure
+	./configure --with-nagios-user=nagios --with-nagios-group=nagios --prefix=/usr/local/nagios/
 	make all
 	make install
 
@@ -3467,11 +3476,31 @@ case $valret in
 	
 	fi
 
-	# Interface Web Exfoliation
+	# Installation Nagios Plugins Pour Centreon-Engine
 	if [ "$choix" = "2" ]
 	then
-		rm -f $fichtemp
-		make install-exfoliation &> /dev/null
+	
+	if [ -f $CentenginePidFile ] ; then
+	/etc/init.d/centengine stop &> /dev/null
+	fi
+
+	tar xvzf $nom_fichier
+	cd $nom_repertoire
+	
+	./configure --with-nagios-user=centreon-engine --with-nagios-group=centreon-engine --prefix=/usr/local/centreon-plugins 
+	make all
+	make install
+
+	rm -rf /usr/local/centreon-plugins/include/
+	rm -rf /usr/local/centreon-plugins/share/
+
+	cd ..
+
+	rm -rf /root/$nom_repertoire/
+	rm -f /root/$nom_fichier
+
+	/etc/init.d/centengine start &> /dev/null	
+
 	fi
 	
 	;;
