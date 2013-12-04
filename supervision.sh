@@ -4447,6 +4447,11 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	make
 	make install
 
+	if ! grep "/usr/local/centreon-clib/lib" /etc/ld.so.conf.d/libc.conf > /dev/null ; then
+		echo "/usr/local/centreon-clib/lib" >> /etc/ld.so.conf.d/libc.conf
+		ldconfig -v &> /dev/null
+	fi
+
 	cd ../..
 
 	rm -rf /root/$nom_repertoire/
