@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 04-12-2013
+# Date : 07-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -227,6 +227,7 @@ nettoyage_table_installation()
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
+if [ "$VAR15" = "OUI" ] ; then
 
 if [ ! -f /usr/bin/smistrip ] ||
    [ ! -f /usr/bin/download-mibs ] ; then
@@ -688,17 +689,48 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	rm -f $fichtemp
 fi
 
+fi
+
 }
 
 
 #############################################################################
-# Fonction Inventaire Composant
+# Fonction Inventaire Coposant & Logiciel Composant
 #############################################################################
 
-inventaire_composant()
+inventaire_composant_logiciel()
 {
 
+
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
+if [ "$VAR15" = "OUI" ] ; then
+
+	cat <<- EOF > $fichtemp
+	select version
+	from version
+	where logiciel='snmp-mibs-downloader' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
+
+	version_reference_snmp_mibs_downloader=$(sed '$!d' /tmp/version-reference.txt)
+	rm -f /tmp/version-reference.txt
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	select version
+	from inventaire
+	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
+
+	version_installe_snmp_mibs_downloader=$(sed '$!d' /tmp/version-installe.txt)
+	rm -f /tmp/version-installe.txt
+	rm -f $fichtemp
+
 
 
 	cat <<- EOF > $fichtemp
@@ -713,6 +745,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
+
+
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
@@ -724,6 +758,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	composant_nagios_plugins=$(sed '$!d' /tmp/composant.txt)
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
+
+
 
 	cat <<- EOF > $fichtemp
 	select composant
@@ -737,6 +773,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
+
+
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
@@ -748,6 +786,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	composant_centreon_clib=$(sed '$!d' /tmp/composant.txt)
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
+
+
 
 	cat <<- EOF > $fichtemp
 	select composant
@@ -761,6 +801,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
+
+
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
@@ -772,6 +814,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	composant_centreon_ssh_connector=$(sed '$!d' /tmp/composant.txt)
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
+
+
 
 	cat <<- EOF > $fichtemp
 	select composant
@@ -785,6 +829,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
+
+
 	cat <<- EOF > $fichtemp
 	select composant
 	from inventaire
@@ -796,6 +842,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	composant_centreon_broker=$(sed '$!d' /tmp/composant.txt)
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
+
+
 
 	cat <<- EOF > $fichtemp
 	select composant
@@ -809,49 +857,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 	rm -f /tmp/composant.txt
 	rm -f $fichtemp
 
-}
 
-#############################################################################
-# Fonction Inventaire Version Logiciel
-#############################################################################
-
-inventaire_version_logiciel()
-{
-
-
-fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
-
-
-if [ -f /usr/bin/smistrip ] ||
-   [ -f /usr/bin/download-mibs ] ; then
-
-	cat <<- EOF > $fichtemp
-	select version
-	from version
-	where logiciel='snmp-mibs-downloader' ;
-	EOF
-
-	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
-
-	version_reference_snmp_mibs_downloader=$(sed '$!d' /tmp/version-reference.txt)
-	rm -f /tmp/version-reference.txt
-	rm -f $fichtemp
-
-
-	cat <<- EOF > $fichtemp
-	select version
-	from inventaire
-	where logiciel='snmp-mibs-downloader' and uname='`uname -n`' ;
-	EOF
-
-	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
-
-	version_installe_snmp_mibs_downloader=$(sed '$!d' /tmp/version-installe.txt)
-	rm -f /tmp/version-installe.txt
-	rm -f $fichtemp
-fi
-
-if [ -f /usr/local/nagios/bin/nagios ] ; then
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -865,7 +871,6 @@ if [ -f /usr/local/nagios/bin/nagios ] ; then
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -877,14 +882,8 @@ if [ -f /usr/local/nagios/bin/nagios ] ; then
 	version_installe_nagios=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/nagios/libexec/check_ping ] &&
-   [ -f /usr/local/nagios/libexec/check_fping ] &&
-   [ -f /usr/local/nagios/libexec/check_ssh ] ||
-   [ -f /usr/local/centreon-plugins/libexec/check_ping ] &&
-   [ -f /usr/local/centreon-plugins/libexec/check_fping ] &&
-   [ -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -898,7 +897,6 @@ if [ -f /usr/local/nagios/libexec/check_ping ] &&
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -910,10 +908,8 @@ if [ -f /usr/local/nagios/libexec/check_ping ] &&
 	version_installe_nagios_plugins=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/nagios/bin/ndomod.o ] ||
-   [ -f /usr/local/nagios/bin/ndo2db ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -927,7 +923,6 @@ if [ -f /usr/local/nagios/bin/ndomod.o ] ||
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -939,9 +934,8 @@ if [ -f /usr/local/nagios/bin/ndomod.o ] ||
 	version_installe_ndoutils=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -955,7 +949,6 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -967,9 +960,8 @@ if [ -f /usr/local/nagios/libexec/check_nrpe ] ; then
 	version_installe_nrpe=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -983,7 +975,6 @@ if [ -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -995,9 +986,8 @@ if [ -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
 	version_installe_centreon_clib=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1011,7 +1001,6 @@ if [ -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1023,9 +1012,8 @@ if [ -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
 	version_installe_centreon_perl_connector=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1039,7 +1027,6 @@ if [ -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1051,12 +1038,8 @@ if [ -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
 	version_installe_centreon_ssh_connector=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/centreon-engine/bin/centengine ] ||
-   [ -f /usr/local/centreon-engine/etc/centengine.cfg ] ||
-   [ -f /usr/local/centreon-engine/lib/centreon-engine/webservice.so ] ||
-   [ -f /etc/init.d/centengine ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1070,7 +1053,6 @@ if [ -f /usr/local/centreon-engine/bin/centengine ] ||
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1082,12 +1064,8 @@ if [ -f /usr/local/centreon-engine/bin/centengine ] ||
 	version_installe_centreon_engine=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /usr/local/centreon-broker/bin/cbd ] ||
-   [ -f /usr/local/centreon-broker/etc/master.run ] ||
-   [ -f /usr/local/centreon-broker/lib/cbmod.so ] ||
-   [ -f /etc/init.d/cbd ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1101,7 +1079,6 @@ if [ -f /usr/local/centreon-broker/bin/cbd ] ||
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1113,12 +1090,8 @@ if [ -f /usr/local/centreon-broker/bin/cbd ] ||
 	version_installe_centreon_broker=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -f /etc/centreon/instCentCore.conf ] ||
-   [ -f /etc/centreon/instCentPlugins.conf ] ||
-   [ -f /etc/centreon/instCentStorage.conf ] ||
-   [ -f /etc/centreon/instCentWeb.conf ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1132,7 +1105,6 @@ if [ -f /etc/centreon/instCentCore.conf ] ||
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1144,13 +1116,8 @@ if [ -f /etc/centreon/instCentCore.conf ] ||
 	version_installe_centreon=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
-fi
 
-if [ -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
-   [ -d /usr/local/centreon/www/widgets/hostgroup-monitoring ] ||
-   [ -d /usr/local/centreon/www/widgets/host-monitoring ] ||
-   [ -d /usr/local/centreon/www/widgets/servicegroup-monitoring ] ||
-   [ -d /usr/local/centreon/www/widgets/service-monitoring ] ; then
+
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -1164,7 +1131,6 @@ if [ -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
-
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
@@ -1176,6 +1142,7 @@ if [ -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
 	version_installe_centreon_widgets=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
+
 fi
 
 }
@@ -1455,7 +1422,7 @@ menu()
 
 lecture_config_centraliser
 nettoyage_table_installation
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1598,7 +1565,7 @@ menu
 menu_installation_serveur_supervision()
 {
 
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1743,8 +1710,7 @@ menu_installation_serveur_supervision
 menu_installation_composant_complementaire_nagios()
 {
 
-inventaire_composant
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1818,8 +1784,7 @@ menu_installation_composant_complementaire
 menu_installation_composant_complementaire_centreon()
 {
 
-inventaire_composant
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1917,7 +1882,7 @@ menu_installation_composant_complementaire
 menu_installation_suite_nagios()
 {
 
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -1999,7 +1964,7 @@ menu_installation_serveur_supervision
 menu_installation_suite_centreon()
 {
 
-inventaire_version_logiciel
+inventaire_composant_logiciel
 verification_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
