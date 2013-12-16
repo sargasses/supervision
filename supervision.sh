@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 07-12-2013
+# Date : 16-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1453,8 +1453,14 @@ case $valret in
 	# Installation Serveur de Supervision
 	if [ "$choix" = "2" ]
 	then
-		rm -f $fichtemp
-              menu_installation_serveur_supervision
+		if [ "$VAR15" = "OUI" ] ; then
+			rm -f $fichtemp
+              	menu_installation_serveur_supervision
+		else
+			rm -f $fichtemp
+			message_erreur
+			menu
+		fi
 	fi
 
 	# Quitter
