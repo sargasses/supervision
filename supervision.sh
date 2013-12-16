@@ -1455,7 +1455,7 @@ case $valret in
 	then
 		if [ "$VAR15" = "OUI" ] ; then
 			rm -f $fichtemp
-              	menu_installation_serveur_supervision
+			menu_installation_serveur_supervision
 		else
 			rm -f $fichtemp
 			message_erreur
