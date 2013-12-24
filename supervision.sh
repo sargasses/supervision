@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 16-12-2013
+# Date : 24-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5749,22 +5749,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 
-	if [ "$version_choix" = "2.3" ] ; then
-	if [ ! -f /etc/centreon/instCentCore.conf ] ||
-	   [ ! -f /etc/centreon/instCentPlugins.conf ] ||
-	   [ ! -f /etc/centreon/instCentStorage.conf ] ||
-	   [ ! -f /etc/centreon/instCentWeb.conf ] ; then
+	if [ -f /usr/local/nagios/bin/nagios ] ; then
 
-	./install.sh -i
-	
-	else
-
-	./install.sh -u /etc/centreon/
-
-	fi
-	fi
-
-	if [ "$version_choix" = "2.4" ] ; then
 	if [ ! -f /etc/centreon/instCentCore.conf ] ||
 	   [ ! -f /etc/centreon/instCentPlugins.conf ] ||
 	   [ ! -f /etc/centreon/instCentStorage.conf ] ||
@@ -5782,9 +5768,38 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	PLUGIN_DIR=/usr/local/nagios/libexec
 	EOF
 
+	./install.sh -i -f $fichtemp
+
+	rm -f $fichtemp
 	
-	#./install.sh -i -f $fichtemp
-	./install.sh -i
+	else
+
+	./install.sh -u /etc/centreon/
+
+	fi
+	fi
+
+
+	if [ -f /usr/local/centreon-engine/bin/centengine ] ; then
+
+	if [ ! -f /etc/centreon/instCentCore.conf ] ||
+	   [ ! -f /etc/centreon/instCentPlugins.conf ] ||
+	   [ ! -f /etc/centreon/instCentStorage.conf ] ||
+	   [ ! -f /etc/centreon/instCentWeb.conf ] ; then
+
+	cat <<- EOF > $fichtemp
+	MONITORINGENGINE_USER=centreon-engine
+	BROKER_USER=centreon-broker
+	MONITORINGENGINE_LOG=/var/log/centreon-engine
+	PLUGIN_DIR=/usr/local/centreon-plugins/libexec
+	MONITORINGENGINE_INIT_SCRIPT=/etc/init.d/centengine
+	MONITORINGENGINE_BINARY=/usr/local/centreon-engine/bin/centengine
+	MONITORINGENGINE_ETC=/usr/local/centreon-engine/etc
+	BROKER_ETC=/usr/local/centreon-broker/etc
+	BROKER_INIT_SCRIPT=/etc/init.d/cbd
+	EOF
+
+	./install.sh -i -f $fichtemp
 
 	rm -f $fichtemp
 	
