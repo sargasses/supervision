@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 24-12-2013
+# Date : 25-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -470,11 +470,7 @@ if [ ! -f /usr/local/nagios/bin/nagios ] ; then
 	rm -f $fichtemp
 fi
 
-if [ ! -f /usr/local/nagios/libexec/check_ping ] &&
-   [ ! -f /usr/local/nagios/libexec/check_fping ] &&
-   [ ! -f /usr/local/nagios/libexec/check_ssh ] ||
-   [ ! -f /usr/local/centreon-plugins/libexec/check_ping ] &&
-   [ ! -f /usr/local/centreon-plugins/libexec/check_fping ] &&
+if [ ! -f /usr/local/nagios/libexec/check_ssh ] &&
    [ ! -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
 
 	cat <<- EOF > $fichtemp
@@ -695,7 +691,7 @@ fi
 
 
 #############################################################################
-# Fonction Inventaire Coposant & Logiciel Composant
+# Fonction Inventaire Composant & Logiciel 
 #############################################################################
 
 inventaire_composant_logiciel()
@@ -1292,11 +1288,7 @@ else
 	choix12="\Z2Installation Nagios Core\Zn" 
 fi
 
-if [ ! -f /usr/local/nagios/libexec/check_ping ] &&
-   [ ! -f /usr/local/nagios/libexec/check_fping ] &&
-   [ ! -f /usr/local/nagios/libexec/check_ssh ] ||
-   [ ! -f /usr/local/centreon-plugins/libexec/check_ping ] &&
-   [ ! -f /usr/local/centreon-plugins/libexec/check_fping ] &&
+if [ ! -f /usr/local/nagios/libexec/check_ssh ] && 
    [ ! -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
 	choix13="\Z1Installation Nagios Plugins\Zn" 
 
@@ -3447,7 +3439,7 @@ case $valret in
 	
 	fi
 
-	;;
+
 
 	# Installation Nagios Plugins Pour Centreon-Engine
 	if [ "$choix" = "2" ]
