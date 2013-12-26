@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 25-12-2013
+# Date : 26-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5623,7 +5623,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	if grep "# Required-Start:" /root/$nom_repertoire/tmpl/install/centcore.init.d > /dev/null ; then
 		ligne=$(sed -n '/# Required-Start:/=' /root/$nom_repertoire/tmpl/install/centcore.init.d)
 		sed -i ""$ligne"d" /root/$nom_repertoire/tmpl/install/centcore.init.d
-		sed -i "$ligne"i'\# Required-Start: sshd' /root/$nom_repertoire/tmpl/install/centcore.init.d
+		sed -i "$ligne"i'\# Required-Start:	$local_fs $network' /root/$nom_repertoire/tmpl/install/centcore.init.d
 	fi
 
 	if grep "# Default-Start:" /root/$nom_repertoire/tmpl/install/centcore.init.d > /dev/null ; then
@@ -5635,7 +5635,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	if grep "# Required-Start:" /root/$nom_repertoire/tmpl/install/centstorage.init.d > /dev/null ; then
 		ligne=$(sed -n '/# Required-Start:/=' /root/$nom_repertoire/tmpl/install/centstorage.init.d)
 		sed -i ""$ligne"d" /root/$nom_repertoire/tmpl/install/centstorage.init.d
-		sed -i "$ligne"i'\# Required-Start: sshd' /root/$nom_repertoire/tmpl/install/centstorage.init.d
+		sed -i "$ligne"i'\# Required-Start:	$local_fs $network' /root/$nom_repertoire/tmpl/install/centstorage.init.d
 	fi
 
 	if grep "# Default-Start:" /root/$nom_repertoire/tmpl/install/centstorage.init.d > /dev/null ; then
@@ -5823,9 +5823,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f /root/$nom_fichier_messages
 	rm -f /root/$nom_fichier_help
 
-	if [ -f /etc/centreon/conf.pm ] ; then
-
+	if [ -f /usr/local/nagios/bin/ndo2db ] ; then
 	/etc/init.d/ndo2db start &> /dev/null
+	fi
+
 	/etc/init.d/centcore start &> /dev/null
 	/etc/init.d/centstorage start &> /dev/null
 
