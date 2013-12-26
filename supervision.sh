@@ -5830,7 +5830,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	/etc/init.d/centcore start &> /dev/null
 	/etc/init.d/centstorage start &> /dev/null
 
-	fi
 
 (
  echo "90" ; sleep 1
