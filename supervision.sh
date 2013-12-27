@@ -5290,7 +5290,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Broker" 10 60 0 \
 
 
-	if ! grep -w "^centreon-engine" /etc/passwd > /dev/null ; then
+	if ! grep -w "^centreon-broker" /etc/passwd > /dev/null ; then
 		groupadd -g 6002 centreon-broker
 		useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
 	fi
