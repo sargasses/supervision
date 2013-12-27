@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 26-12-2013
+# Date : 27-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -3444,6 +3444,11 @@ case $valret in
 	if [ "$choix" = "2" ]
 	then
 	
+	if ! grep -w "^centreon-engine" /etc/passwd > /dev/null ; then
+		groupadd -g 6001 centreon-engine
+		useradd -u 6001 -g centreon-engine -m -r -d /var/lib/centreon-engine -c "Centreon-engine Admin" centreon-engine
+	fi
+
 	if [ -f $CentenginePidFile ] ; then
 	/etc/init.d/centengine stop &> /dev/null
 	fi
@@ -5043,12 +5048,14 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Engine" 10 60 0 \
 
 
+	if ! grep -w "^centreon-engine" /etc/passwd > /dev/null ; then
+		groupadd -g 6001 centreon-engine
+		useradd -u 6001 -g centreon-engine -m -r -d /var/lib/centreon-engine -c "Centreon-engine Admin" centreon-engine
+	fi
+
 	if [ -f $CentenginePidFile ] ; then
 	/etc/init.d/centengine stop &> /dev/null
 	fi
-
-	groupadd -g 6001 centreon-engine
-	useradd -u 6001 -g centreon-engine -m -r -d /var/lib/centreon-engine -c "Centreon-engine Admin" centreon-engine
 
 	tar xvzf $nom_fichier
 	cd $nom_repertoire/build
@@ -5283,12 +5290,14 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Broker" 10 60 0 \
 
 
+	if ! grep -w "^centreon-engine" /etc/passwd > /dev/null ; then
+		groupadd -g 6002 centreon-broker
+		useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
+	fi
+
 	if [ -f $CbdbrokerPidFile ] || [ -f $CbdbrokerPidFile ] ; then	
 	/etc/init.d/cbd stop &> /dev/null
 	fi
-
-	groupadd -g 6002 centreon-broker
-	useradd -u 6002 -g centreon-broker -m -r -d /var/lib/centreon-broker -c "Centreon-broker Admin" centreon-broker
 
 	tar xvzf $nom_fichier
 	cd $nom_repertoire/build
