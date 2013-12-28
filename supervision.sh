@@ -5349,7 +5349,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	update-rc.d cbd defaults &> /dev/null
 
+	if [ -f /usr/local/centreon-broker/etc/central-broker.xml ] ; then
 	/etc/init.d/cbd start &> /dev/null
+	fi
 
 (
  echo "90" ; sleep 1
