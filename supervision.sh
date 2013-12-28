@@ -359,8 +359,8 @@ if [ ! -f /usr/lib/libperl.so ] ||
 	rm -f $fichtemp
 fi
 
-if [ ! -f /usr/lib/libssh2.so ] ||
-   [ ! -f /usr/lib/libgcrypt.so ] ; then
+if [ ! -f /usr/include/libssh2.h ] ||
+   [ ! -f /usr/include/gcrypt.h ] ; then
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -1239,8 +1239,8 @@ else
 	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
 fi
 
-if [ ! -f /usr/lib/libssh2.so ] ||
-   [ ! -f /usr/lib/libgcrypt.so ] ||
+if [ ! -f /usr/include/libssh2.h ] ||
+   [ ! -f /usr/include/gcrypt.h ] ||
    [ "$composant_centreon_ssh_connector" != "centreon-ssh-connector" ] ; then
 	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
