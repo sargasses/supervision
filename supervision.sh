@@ -5102,6 +5102,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	update-rc.d centengine defaults &> /dev/null
 
+	/etc/init.d/centengine start &> /dev/null
+
 (
  echo "90" ; sleep 1
 ) |
@@ -5346,6 +5348,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	chmod 755 /etc/init.d/cbd
 
 	update-rc.d cbd defaults &> /dev/null
+
+	/etc/init.d/cbd start &> /dev/null
 
 (
  echo "90" ; sleep 1
@@ -5840,9 +5844,22 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f /root/$nom_fichier_messages
 	rm -f /root/$nom_fichier_help
 
+	if [ -f /usr/local/nagios/bin/nagios ] ; then
+	/etc/init.d/nagios start &> /dev/null
+	fi
+
 	if [ -f /usr/local/nagios/bin/ndo2db ] ; then
 	/etc/init.d/ndo2db start &> /dev/null
 	fi
+
+	if [ -f /usr/local/centreon-engine/bin/centengine ] ; then
+	/etc/init.d/centengine start &> /dev/null
+	fi
+
+	if [ -f /usr/local/centreon-broker/etc/central-broker.xml ] ; then
+	/etc/init.d/cbd start &> /dev/null
+	fi
+
 
 	/etc/init.d/centcore start &> /dev/null
 	/etc/init.d/centstorage start &> /dev/null
