@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 27-12-2013
+# Date : 28-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -2618,9 +2618,17 @@ installation_composant_centreon_core()
  echo "XXX" ; echo "apt-get -y install libcrypt-des-perl"; echo "XXX"
 	apt-get -y install libcrypt-des-perl &> /dev/null
 
+if grep "Debian GNU/Linux 6.0" /etc/issue.net > /dev/null ; then
  echo "40" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libdigest-hmac-perl libdigest-sha1-perl"; echo "XXX"
 	apt-get -y install libdigest-hmac-perl libdigest-sha1-perl &> /dev/null
+fi
+
+if grep "Debian GNU/Linux 7" /etc/issue.net > /dev/null ; then
+ echo "40" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install libdigest-hmac-perl libdigest-sha-perl"; echo "XXX"
+	apt-get -y install libdigest-hmac-perl libdigest-sha-perl &> /dev/null
+fi
 
  echo "50" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libgd-gd2-perl"; echo "XXX"
