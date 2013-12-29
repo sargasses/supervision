@@ -5616,7 +5616,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Centreon Core" 10 60 0 \
 
 
-	if ! grep -w "^centreon" /etc/passwd > /dev/null ; then
+	if ! grep -w "Centreon Admin" /etc/passwd > /dev/null ; then
 		groupadd -g 6000 centreon
 		useradd -u 6000 -g centreon -m -r -d /var/lib/centreon -c "Centreon Admin" centreon
 	fi
