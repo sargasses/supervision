@@ -5430,7 +5430,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select version
 	from version
-	where logiciel='centreon' ;
+	where logiciel='centreon-core' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
@@ -5456,7 +5456,7 @@ case $valret in
 	cat <<- EOF > $fichtemp
 	select version
 	from application
-	where logiciel='centreon' ;
+	where logiciel='centreon-core' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/liste-version.txt
@@ -5512,7 +5512,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select url
 	from application
-	where logiciel='centreon' and version='$choix_version' ;
+	where logiciel='centreon-core' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/url-fichier.txt
@@ -5524,7 +5524,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select fichier
 	from application
-	where logiciel='centreon' and version='$choix_version' ;
+	where logiciel='centreon-core' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-fichier.txt
@@ -5536,7 +5536,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select repertoire
 	from application
-	where logiciel='centreon' and version='$choix_version' ;
+	where logiciel='centreon-core' and version='$choix_version' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/nom-repertoire.txt
@@ -5895,7 +5895,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where logiciel='centreon' and uname='`uname -n`' ;
+	where logiciel='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -5904,7 +5904,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	cat <<- EOF > $fichtemp
 	insert into inventaire ( logiciel, version, uname, date, heure )
-	values ( 'centreon' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
+	values ( 'centreon-core' , '$choix_version' , '`uname -n`' , '`date +%d.%m.%Y`' , '`date +%Hh%M`' ) ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
