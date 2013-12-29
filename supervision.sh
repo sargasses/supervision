@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 28-12-2013
+# Date : 29-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -645,7 +645,7 @@ if [ ! -f /etc/centreon/instCentCore.conf ] ||
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
-	where logiciel='centreon' and uname='`uname -n`' ;
+	where logiciel='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -1092,24 +1092,24 @@ if [ "$VAR15" = "OUI" ] ; then
 	cat <<- EOF > $fichtemp
 	select version
 	from version
-	where logiciel='centreon' ;
+	where logiciel='centreon-core' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-reference.txt
 
-	version_reference_centreon=$(sed '$!d' /tmp/version-reference.txt)
+	version_reference_centreon_core=$(sed '$!d' /tmp/version-reference.txt)
 	rm -f /tmp/version-reference.txt
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
-	where logiciel='centreon' and uname='`uname -n`' ;
+	where logiciel='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
 
-	version_installe_centreon=$(sed '$!d' /tmp/version-installe.txt)
+	version_installe_centreon_core=$(sed '$!d' /tmp/version-installe.txt)
 	rm -f /tmp/version-installe.txt
 	rm -f $fichtemp
 
@@ -2607,14 +2607,26 @@ installation_composant_centreon_core()
 (
 
  echo "10" ; sleep 1
- echo "XXX" ; echo "apt-get -y install rrdtool librrds-perl"; echo "XXX"
-	apt-get -y install rrdtool librrds-perl &> /dev/null
+ echo "XXX" ; echo "apt-get -y install sudo tofrodos"; echo "XXX"
+	apt-get -y install sudo tofrodos &> /dev/null
+
+ echo "15" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install lsb-release"; echo "XXX"
+	apt-get -y install lsb-release &> /dev/null
 
  echo "20" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libconfig-inifiles-perl"; echo "XXX"
 	apt-get -y install libconfig-inifiles-perl &> /dev/null
 
+ echo "25" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install php5-ldap php5-snmp php5-gd"; echo "XXX"
+	apt-get -y install php5-ldap php5-snmp php5-gd &> /dev/null
+
  echo "30" ; sleep 1
+ echo "XXX" ; echo "apt-get -y install rrdtool librrds-perl"; echo "XXX"
+	apt-get -y install rrdtool librrds-perl &> /dev/null
+
+ echo "35" ; sleep 1
  echo "XXX" ; echo "apt-get -y install libcrypt-des-perl"; echo "XXX"
 	apt-get -y install libcrypt-des-perl &> /dev/null
 
@@ -5334,6 +5346,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	fi
 
 	chown centreon-broker:centreon-broker  /var/log/centreon-broker
+
 	chmod 775 /var/log/centreon-broker
 
 	chmod 775 /var/lib/centreon-broker
@@ -5601,6 +5614,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Centreon Core" \
 	  --gauge "Installation Centreon Core" 10 60 0 \
+
+
+	if ! grep -w "^centreon" /etc/passwd > /dev/null ; then
+		groupadd -g 6000 centreon
+		useradd -u 6000 -g centreon -m -r -d /var/lib/centreon -c "Centreon Admin" centreon
+	fi
 
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
