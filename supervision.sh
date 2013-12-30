@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 29-12-2013
+# Date : 30-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5881,10 +5881,11 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	/etc/init.d/cbd start &> /dev/null
 	fi
 
-
 	/etc/init.d/centcore start &> /dev/null
-	/etc/init.d/centstorage start &> /dev/null
 
+	if [ ! -d /usr/local/centreon-broker ] ; then
+	/etc/init.d/centstorage start &> /dev/null
+	fi
 
 (
  echo "90" ; sleep 1
