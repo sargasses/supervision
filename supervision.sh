@@ -2,7 +2,7 @@
 #
 # Copyright 2013 
 # Développé par : Stéphane HACQUARD
-# Date : 30-12-2013
+# Date : 31-12-2013
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -17,7 +17,6 @@ DIALOG=${DIALOG=dialog}
 
 REPERTOIRE_CONFIG=/usr/local/scripts/config
 FICHIER_CONFIG=config_centralisation_installation
-
 
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
