@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Copyright 2013 
+# Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 31-12-2013
+# Date : 01-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
