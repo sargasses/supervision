@@ -5632,7 +5632,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	/etc/init.d/centengine stop &> /dev/null
 	fi
 
-	if [ -f $CbdbrokerPidFile ] || [ -f $CbdbrokerPidFile ] ; then	
+	if [ -f $CbdbrokerPidFile ] || [ -f $CbdrrdPidFile ] ; then	
 	/etc/init.d/cbd stop &> /dev/null
 	fi
 
