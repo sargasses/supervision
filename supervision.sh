@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 01-01-2014
+# Date : 04-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -4094,8 +4094,13 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	tar xvzf $nom_fichier
 	cd $nom_repertoire
-	
-	./configure --enable-command-args --enable-ssl 
+
+	if [ -d /usr/lib/x86_64-linux-gnu ] ; then
+	./configure --enable-command-args --enable-ssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu
+	else
+	./configure --enable-command-args --enable-ssl
+	fi
+	 
 	make all
 	make install
 
