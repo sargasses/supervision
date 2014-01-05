@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 04-01-2014
+# Date : 05-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5955,7 +5955,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cat <<- EOF > $fichtemp
 	select version
 	from inventaire
-	where logiciel='centreon' and uname='`uname -n`' ;
+	where logiciel='centreon-core' and uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/version-installe.txt
