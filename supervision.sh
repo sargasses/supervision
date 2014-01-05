@@ -3709,7 +3709,6 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f /tmp/nom-fichier.txt
 	rm -f $fichtemp
 
-
 (
  echo "40" ; sleep 1
 ) |
@@ -3740,7 +3739,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation NDOutils" \
-	  --yesno "Installation du patch de NDOutils" 6 38
+	  --yesno "Installation du patch de NDOutils" 6 38  2> $fichtemp
 
 
 valret=$?
