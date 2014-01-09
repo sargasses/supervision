@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 05-01-2014
+# Date : 09-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -3046,9 +3046,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation Nagios Core" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
-		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
-		groupadd nagcmd
-		usermod -G nagcmd,nagios nagios
+		groupadd -g 9000 nagios 
+		groupadd -g 9001 nagcmd 
+		useradd -u 9000 -g nagios -G nagcmd -d /usr/local/nagios -c "Nagios Admin" nagios 
 		usermod -G nagios,nagcmd www-data
 	fi
 
@@ -4081,9 +4081,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --gauge "Installation NRPE" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
-		useradd --create-home --password  $(mkpasswd -H md5 nagios) --shell /bin/bash nagios
-		groupadd nagcmd
-		usermod -G nagcmd,nagios nagios
+		groupadd -g 9000 nagios 
+		groupadd -g 9001 nagcmd 
+		useradd -u 9000 -g nagios -G nagcmd -d /usr/local/nagios -c "Nagios Admin" nagios 
 		usermod -G nagios,nagcmd www-data
 	fi
 
