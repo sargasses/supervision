@@ -141,10 +141,10 @@ else
 fi
 
 #############################################################################
-# Fonction Lecture Fichier Configuration Gestion Centraliser
+# Fonction Lecture Fichier Configuration Gestion Centraliser Installation
 #############################################################################
 
-lecture_config_centraliser()
+lecture_config_centraliser_installation()
 {
 
 if test -e $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION ; then
@@ -1411,7 +1411,7 @@ fi
 menu()
 {
 
-lecture_config_centraliser
+lecture_config_centraliser_installation
 nettoyage_table_installation
 inventaire_composant_logiciel
 verification_installation
@@ -1486,7 +1486,7 @@ exit
 menu_gestion_centraliser_installations()
 {
 
-lecture_config_centraliser
+lecture_config_centraliser_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
