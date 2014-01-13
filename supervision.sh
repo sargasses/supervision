@@ -16,7 +16,7 @@
 DIALOG=${DIALOG=dialog}
 
 REPERTOIRE_CONFIG=/usr/local/scripts/config
-FICHIER_CONFIG=config_centralisation_installation
+FICHIER_CENTRALISATION_INSTALLATION=config_centralisation_installation
 
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
@@ -147,13 +147,13 @@ fi
 lecture_config_centraliser()
 {
 
-if test -e $REPERTOIRE_CONFIG/$FICHIER_CONFIG ; then
+if test -e $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION ; then
 
 num=10
 while [ "$num" -le 15 ] 
 	do
 	VAR=VAR$num
-	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CONFIG | grep $VAR=`
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION | grep $VAR=`
 	VAL2=`expr length "$VAL1"`
 	VAL3=`expr substr "$VAL1" 7 $VAL2`
 	eval VAR$num="$VAL3"
@@ -167,7 +167,7 @@ mkdir -p $REPERTOIRE_CONFIG
 num=10
 while [ "$num" -le 15 ] 
 	do
-	echo "VAR$num=" >> $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	echo "VAR$num=" >> $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 	num=`expr $num + 1`
 	done
 
@@ -175,7 +175,7 @@ num=10
 while [ "$num" -le 15 ] 
 	do
 	VAR=VALFIC$num
-	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CONFIG | grep $VAR=`
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION | grep $VAR=`
 	VAL2=`expr length "$VAL1"`
 	VAL3=`expr substr "$VAL1" 7 $VAL2`
 	eval VAR$num="$VAL3"
@@ -1177,7 +1177,7 @@ verification_installation()
 # 0=noir, 1=rouge, 2=vert, 3=jaune, 4=bleu, 5=magenta, 6=cyan 7=blanc
 
 
-if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CONFIG > /dev/null ; then
+if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION > /dev/null ; then
 	choix1="\Z1Gestion Centraliser des Installations\Zn" 
 else
 	choix1="\Z2Gestion Centraliser des Installations\Zn"  
@@ -1514,11 +1514,11 @@ case $valret in
 	VARSAISI14=$(sed -n 5p $fichtemp)
 	
 
-	sed -i "s/VAR10=$VAR10/VAR10=$VARSAISI10/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
-	sed -i "s/VAR11=$VAR11/VAR11=$VARSAISI11/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
-	sed -i "s/VAR12=$VAR12/VAR12=$VARSAISI12/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
-	sed -i "s/VAR13=$VAR13/VAR13=$VARSAISI13/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
-	sed -i "s/VAR14=$VAR14/VAR14=$VARSAISI14/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR10=$VAR10/VAR10=$VARSAISI10/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
+	sed -i "s/VAR11=$VAR11/VAR11=$VARSAISI11/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
+	sed -i "s/VAR12=$VAR12/VAR12=$VARSAISI12/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
+	sed -i "s/VAR13=$VAR13/VAR13=$VARSAISI13/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
+	sed -i "s/VAR14=$VAR14/VAR14=$VARSAISI14/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 
       
 	cat <<- EOF > /tmp/databases.txt
@@ -1528,10 +1528,10 @@ case $valret in
 	mysql -h $VARSAISI10 -P $VARSAISI11 -u $VARSAISI13 -p$VARSAISI14 < /tmp/databases.txt &>/tmp/resultat.txt
 
 	if grep -w "^$VARSAISI12" /tmp/resultat.txt > /dev/null ; then
-	sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 
 	else
-	sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CONFIG
+	sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 	message_erreur
 	fi
 
