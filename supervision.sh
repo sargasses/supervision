@@ -1183,15 +1183,21 @@ else
 	choix1="\Z2Gestion Centraliser des Installations\Zn"  
 fi
 
+if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION > /dev/null ; then
+	choix2="\Z1Gestion Centraliser des Sauvegardes\Zn" 
+else
+	choix2="\Z2Gestion Centraliser des Sauvegardes\Zn"  
+fi
+
 if [ ! -f /usr/bin/smistrip ] ||
    [ ! -f /usr/bin/download-mibs ] ; then
-	choix2="\Z1Installation MIB SNMP Complementaire\Zn" 
+	choix3="\Z1Installation MIB SNMP Complementaire\Zn" 
 
 elif [ "$version_reference_snmp_mibs_downloader" != "$version_installe_snmp_mibs_downloader" ] ; then
-	choix2="\Zb\Z3Installation MIB SNMP Complementaire\Zn" 
+	choix3="\Zb\Z3Installation MIB SNMP Complementaire\Zn" 
 
 else
-	choix2="\Z2Installation MIB SNMP Complementaire\Zn" 
+	choix3="\Z2Installation MIB SNMP Complementaire\Zn" 
 fi
 
 if [ ! -f /usr/bin/fping ] ||
@@ -1199,51 +1205,51 @@ if [ ! -f /usr/bin/fping ] ||
    [ ! -f /usr/include/gd.h ] ||
    [ ! -f /usr/include/libpng12/png.h ] ||
    [ "$composant_nagios_core" != "nagios-core" ] ; then
-	choix3="\Z1Installation Composant Nagios Core\Zn" 
+	choix4="\Z1Installation Composant Nagios Core\Zn" 
 else
-	choix3="\Z2Installation Composant Nagios Core\Zn" 
+	choix4="\Z2Installation Composant Nagios Core\Zn" 
 fi
 
 if [ ! -f /usr/include/gnutls/gnutls.h ] ||
    [ ! -f /usr/include/krb5.h ] ||
    [ ! -f /usr/lib/libmcrypt.so ] ||
    [ "$composant_nagios_plugins" != "nagios-plugins" ] ; then
-	choix4="\Z1Installation Composant Nagios Plugins\Zn" 
+	choix5="\Z1Installation Composant Nagios Plugins\Zn" 
 else
-	choix4="\Z2Installation Composant Nagios Plugins\Zn" 
+	choix5="\Z2Installation Composant Nagios Plugins\Zn" 
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/include/curl/curl.h ] ||
    [ ! -f /usr/include/openssl/ssl.h ] ||
    [ "$composant_nrpe" != "nrpe" ] ; then
-	choix5="\Z1Installation Composant NRPE\Zn" 
+	choix6="\Z1Installation Composant NRPE\Zn" 
 else
-	choix5="\Z2Installation Composant NRPE\Zn" 
+	choix6="\Z2Installation Composant NRPE\Zn" 
 fi
 
 if [ ! -f /usr/share/build-essential/list ] ||
    [ ! -f /usr/bin/cmake ] ||
    [ "$composant_centreon_clib" != "centreon-clib" ] ; then
-	choix6="\Z1Installation Composant Centreon Clib\Zn" 
+	choix7="\Z1Installation Composant Centreon Clib\Zn" 
 else
-	choix6="\Z2Installation Composant Centreon Clib\Zn" 
+	choix7="\Z2Installation Composant Centreon Clib\Zn" 
 fi
 
 if [ ! -f /usr/lib/libperl.so ] ||
    [ ! -d /usr/share/doc/libperl-dev ] ||
    [ "$composant_centreon_perl_connector" != "centreon-perl-connector" ] ; then
-	choix7="\Z1Installation Composant Centreon Perl Connector\Zn" 
+	choix8="\Z1Installation Composant Centreon Perl Connector\Zn" 
 else
-	choix7="\Z2Installation Composant Centreon Perl Connector\Zn" 
+	choix8="\Z2Installation Composant Centreon Perl Connector\Zn" 
 fi
 
 if [ ! -f /usr/include/libssh2.h ] ||
    [ ! -f /usr/include/gcrypt.h ] ||
    [ "$composant_centreon_ssh_connector" != "centreon-ssh-connector" ] ; then
-	choix8="\Z1Installation Composant Centreon SSH Connector\Zn" 
+	choix9="\Z1Installation Composant Centreon SSH Connector\Zn" 
 else
-	choix8="\Z2Installation Composant Centreon SSH Connector\Zn" 
+	choix9="\Z2Installation Composant Centreon SSH Connector\Zn" 
 fi
 
 if [ ! -f /usr/bin/cmake ] ||
@@ -1252,9 +1258,9 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -f /usr/include/zlib.h ] ||
    [ ! -f /usr/include/openssl/aes.h ] ||
    [ "$composant_centreon_engine" != "centreon-engine" ] ; then
-	choix9="\Z1Installation Composant Centreon Engine\Zn" 
+	choix10="\Z1Installation Composant Centreon Engine\Zn" 
 else
-	choix9="\Z2Installation Composant Centreon Engine\Zn" 
+	choix10="\Z2Installation Composant Centreon Engine\Zn" 
 fi
 
 if [ ! -f /usr/bin/cmake ] ||
@@ -1262,9 +1268,9 @@ if [ ! -f /usr/bin/cmake ] ||
    [ ! -d /usr/share/doc/libqt4-sql-mysql ] ||
    [ ! -f /usr/lib/librrd.so ] ||
    [ "$composant_centreon_broker" != "centreon-broker" ] ; then
-	choix10="\Z1Installation Composant Centreon Broker\Zn" 
+	choix11="\Z1Installation Composant Centreon Broker\Zn" 
 else
-	choix10="\Z2Installation Composant Centreon Broker\Zn" 
+	choix11="\Z2Installation Composant Centreon Broker\Zn" 
 fi
 
 if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
@@ -1272,120 +1278,120 @@ if [ ! -f /usr/lib/perl5/auto/RRDs/RRDs.so ] ||
    [ ! -f /usr/lib/perl5/auto/SNMP/SNMP.so ] ||
    [ ! -f /usr/lib/perl5/XML/Parser.pm ] ||
    [ "$composant_centreon_core" != "centreon-core" ] ; then
-	choix11="\Z1Installation Composant Centreon Core\Zn" 
+	choix12="\Z1Installation Composant Centreon Core\Zn" 
 else
-	choix11="\Z2Installation Composant Centreon Core\Zn" 
+	choix12="\Z2Installation Composant Centreon Core\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/nagios ] ; then
-	choix12="\Z1Installation Nagios Core\Zn" 
+	choix13="\Z1Installation Nagios Core\Zn" 
 
 elif [ "$version_reference_nagios" != "$version_installe_nagios" ] ; then
-	choix12="\Zb\Z3Installation Nagios Core\Zn" 
+	choix13="\Zb\Z3Installation Nagios Core\Zn" 
 
 else
-	choix12="\Z2Installation Nagios Core\Zn" 
+	choix13="\Z2Installation Nagios Core\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_ssh ] && 
    [ ! -f /usr/local/centreon-plugins/libexec/check_ssh ] ; then
-	choix13="\Z1Installation Nagios Plugins\Zn" 
+	choix14="\Z1Installation Nagios Plugins\Zn" 
 
 elif [ "$version_reference_nagios_plugins" != "$version_installe_nagios_plugins" ] ; then
-	choix13="\Zb\Z3Installation Nagios Plugins\Zn" 
+	choix14="\Zb\Z3Installation Nagios Plugins\Zn" 
 
 else
-	choix13="\Z2Installation Nagios Plugins\Zn" 
+	choix14="\Z2Installation Nagios Plugins\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/bin/ndomod.o ] ||
    [ ! -f /usr/local/nagios/bin/ndo2db ] ; then
-	choix14="\Z1Installation NDOutils\Zn" 
+	choix15="\Z1Installation NDOutils\Zn" 
 
 elif [ "$version_reference_ndoutils" != "$version_installe_ndoutils" ] ; then
-	choix14="\Zb\Z3Installation NDOutils\Zn" 
+	choix15="\Zb\Z3Installation NDOutils\Zn" 
 
 else
-	choix14="\Z2Installation NDOutils\Zn" 
+	choix15="\Z2Installation NDOutils\Zn" 
 fi
 
 if [ ! -f /usr/local/nagios/libexec/check_nrpe ] ; then
-	choix15="\Z1Installation NRPE\Zn" 
+	choix16="\Z1Installation NRPE\Zn" 
 
 elif [ "$version_reference_nrpe" != "$version_installe_nrpe" ] ; then
-	choix15="\Zb\Z3Installation NRPE\Zn" 
+	choix16="\Zb\Z3Installation NRPE\Zn" 
 
 else
-	choix15="\Z2Installation NRPE\Zn" 
+	choix16="\Z2Installation NRPE\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-clib/lib/libcentreon_clib.so ] ; then
-	choix16="\Z1Installation Centreon Clib\Zn" 
+	choix17="\Z1Installation Centreon Clib\Zn" 
 
 elif [ "$version_reference_centreon_clib" != "$version_installe_centreon_clib" ] ; then
-	choix16="\Zb\Z3Installation Centreon Clib\Zn" 
+	choix17="\Zb\Z3Installation Centreon Clib\Zn" 
 
 else
-	choix16="\Z2Installation Centreon Clib\Zn" 
+	choix17="\Z2Installation Centreon Clib\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_perl ] ; then
-	choix17="\Z1Installation Centreon Perl Connector\Zn" 
+	choix18="\Z1Installation Centreon Perl Connector\Zn" 
 
 elif [ "$version_reference_centreon_perl_connector" != "$version_installe_centreon_perl_connector" ] ; then
-	choix17="\Zb\Z3Installation Centreon Perl Connector\Zn" 
+	choix18="\Zb\Z3Installation Centreon Perl Connector\Zn" 
 
 else
-	choix17="\Z2Installation Centreon Perl Connector\Zn" 
+	choix18="\Z2Installation Centreon Perl Connector\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-connector/bin/centreon_connector_ssh ] ; then
-	choix18="\Z1Installation Centreon SSH Connector\Zn" 
+	choix19="\Z1Installation Centreon SSH Connector\Zn" 
 
 elif [ "$version_reference_centreon_ssh_connector" != "$version_installe_centreon_ssh_connector" ] ; then
-	choix18="\Zb\Z3Installation Centreon SSH Connector\Zn" 
+	choix19="\Zb\Z3Installation Centreon SSH Connector\Zn" 
 
 else
-	choix18="\Z2Installation Centreon SSH Connector\Zn" 
+	choix19="\Z2Installation Centreon SSH Connector\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-engine/bin/centengine ] ||
    [ ! -f /usr/local/centreon-engine/etc/centengine.cfg ] ||
    [ ! -f /usr/local/centreon-engine/lib/centreon-engine/webservice.so ] ||
    [ ! -f /etc/init.d/centengine ] ; then
-	choix19="\Z1Installation Centreon Engine\Zn" 
+	choix20="\Z1Installation Centreon Engine\Zn" 
 
 elif [ "$version_reference_centreon_engine" != "$version_installe_centreon_engine" ] ; then
-	choix19="\Zb\Z3Installation Centreon Engine\Zn" 
+	choix20="\Zb\Z3Installation Centreon Engine\Zn" 
 
 else
-	choix19="\Z2Installation Centreon Engine\Zn" 
+	choix20="\Z2Installation Centreon Engine\Zn" 
 fi
 
 if [ ! -f /usr/local/centreon-broker/bin/cbd ] ||
    [ ! -f /usr/local/centreon-broker/etc/master.run ] ||
    [ ! -f /usr/local/centreon-broker/lib/cbmod.so ] ||
    [ ! -f /etc/init.d/cbd ] ; then
-	choix20="\Z1Installation Centreon Broker\Zn" 
+	choix21="\Z1Installation Centreon Broker\Zn" 
 
 elif [ "$version_reference_centreon_broker" != "$version_installe_centreon_broker" ] ; then
-	choix20="\Zb\Z3Installation Centreon Broker\Zn"
+	choix21="\Zb\Z3Installation Centreon Broker\Zn"
 
 else
-	choix20="\Z2Installation Centreon Broker\Zn" 
+	choix21="\Z2Installation Centreon Broker\Zn" 
 fi
 
 if [ ! -f /etc/centreon/instCentCore.conf ] ||
    [ ! -f /etc/centreon/instCentPlugins.conf ] ||
    [ ! -f /etc/centreon/instCentStorage.conf ] ||
    [ ! -f /etc/centreon/instCentWeb.conf ] ; then
-	choix21="\Z1Installation Centreon Core\Zn"
+	choix22="\Z1Installation Centreon Core\Zn"
  
 elif [ "$version_reference_centreon_core" != "$version_installe_centreon_core" ] ; then
-	choix21="\Zb\Z3Installation Centreon Core\Zn" 
+	choix22="\Zb\Z3Installation Centreon Core\Zn" 
 
 else
-	choix21="\Z2Installation Centreon Core\Zn" 
+	choix22="\Z2Installation Centreon Core\Zn" 
 fi
 
 if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
@@ -1393,13 +1399,13 @@ if [ ! -d /usr/local/centreon/www/widgets/graph-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/host-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/servicegroup-monitoring ] ||
    [ ! -d /usr/local/centreon/www/widgets/service-monitoring ] ; then
-	choix22="\Z1Installation Centreon Widgets\Zn" 
+	choix23="\Z1Installation Centreon Widgets\Zn" 
 
 elif [ "$version_reference_centreon_widgets" != "$version_installe_centreon_widgets" ] ; then
-	choix22="\Zb\Z3Installation Centreon Widgets\Zn" 
+	choix23="\Zb\Z3Installation Centreon Widgets\Zn" 
 
 else
-	choix22="\Z2Installation Centreon Widgets\Zn" 
+	choix23="\Z2Installation Centreon Widgets\Zn" 
 fi
 
 }
@@ -1423,11 +1429,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Installation Serveur de Supervision" \
 	  --clear \
 	  --colors \
-	  --default-item "3" \
+	  --default-item "4" \
 	  --menu "Quel est votre choix" 11 62 5 \
 	  "1" "$choix1" \
-	  "2" "Installation Serveur de Supervision" \
-	  "3" "Quitter" 2> $fichtemp
+	  "2" "$choix2" \
+	  "3" "Installation Serveur de Supervision" \
+	  "4" "Quitter" 2> $fichtemp
 
 
 valret=$?
@@ -1441,8 +1448,16 @@ case $valret in
               menu_gestion_centraliser_installations
 	fi
 
-	# Installation Serveur de Supervision
+	# Gestion Centraliser des Sauvegardes
 	if [ "$choix" = "2" ]
+	then
+		rm -f $fichtemp
+              menu_gestion_centraliser_sauvegardes
+	fi
+
+
+	# Installation Serveur de Supervision
+	if [ "$choix" = "3" ]
 	then
 		if [ "$VAR15" = "OUI" ] ; then
 			rm -f $fichtemp
@@ -1455,7 +1470,7 @@ case $valret in
 	fi
 
 	# Quitter
-	if [ "$choix" = "3" ]
+	if [ "$choix" = "4" ]
 	then
 		clear
 	fi
@@ -1496,10 +1511,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --title "Gestion Centraliser des Installations" \
 	  --mixedform "Quel est votre choix" 11 60 0 \
 	  "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
-	  "Port Serveur:"    2 1  "$REF11"  2 20  30 26 0  \
-	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 26 0  \
-	  "Compte Root:"     4 1  "$REF13"  4 20  30 26 0  \
-	  "Password Root:"   5 1  "$REF14"  5 20  30 26 1  2> $fichtemp
+	  "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
+	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
+	  "Compte Root:"     4 1  "$REF13"  4 20  30 28 0  \
+	  "Password Root:"   5 1  "$REF14"  5 20  30 28 1  2> $fichtemp
 
 
 valret=$?
@@ -1556,6 +1571,82 @@ menu
 }
 
 #############################################################################
+# Fonction Menu Gestion Centraliser des Sauvegardes
+#############################################################################
+
+menu_gestion_centraliser_sauvegardes()
+{
+
+lecture_config_centraliser_sauvegarde
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
+$DIALOG  --backtitle "Installation Serveur de Supervision" \
+	  --insecure \
+	  --title "Gestion Centraliser des Sauvegardes" \
+	  --mixedform "Quel est votre choix" 11 60 0 \
+	  "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
+	  "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
+	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
+	  "Compte Root:"     4 1  "$REF13"  4 20  30 28 0  \
+	  "Password Root:"   5 1  "$REF14"  5 20  30 28 1  2> $fichtemp
+
+
+valret=$?
+choix=`cat $fichtemp`
+case $valret in
+
+ 0)	# Gestion Centraliser des Sauvegardes
+	VARSAISI10=$(sed -n 1p $fichtemp)
+	VARSAISI11=$(sed -n 2p $fichtemp)
+	VARSAISI12=$(sed -n 3p $fichtemp)
+	VARSAISI13=$(sed -n 4p $fichtemp)
+	VARSAISI14=$(sed -n 5p $fichtemp)
+	
+
+	sed -i "s/VAR10=$VAR10/VAR10=$VARSAISI10/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	sed -i "s/VAR11=$VAR11/VAR11=$VARSAISI11/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	sed -i "s/VAR12=$VAR12/VAR12=$VARSAISI12/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	sed -i "s/VAR13=$VAR13/VAR13=$VARSAISI13/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	sed -i "s/VAR14=$VAR14/VAR14=$VARSAISI14/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+
+      
+	cat <<- EOF > /tmp/databases.txt
+	SHOW DATABASES;
+	EOF
+
+	mysql -h $VARSAISI10 -P $VARSAISI11 -u $VARSAISI13 -p$VARSAISI14 < /tmp/databases.txt &>/tmp/resultat.txt
+
+	if grep -w "^$VARSAISI12" /tmp/resultat.txt > /dev/null ; then
+	sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+
+	else
+	sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	message_erreur
+	fi
+
+	rm -f /tmp/databases.txt
+	rm -f /tmp/resultat.txt
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	;;
+
+esac
+
+rm -f $fichtemp
+
+menu
+
+}
+
+#############################################################################
 # Fonction Menu Installation Serveur de Supervision
 #############################################################################
 
@@ -1575,7 +1666,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 62 5 \
 	  "1" "Installation Composant Complementaire" \
-	  "2" "$choix2" \
+	  "2" "$choix3" \
 	  "3" "Installation Suite Nagios" \
 	  "4" "Installation Suite Centreon" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
@@ -1719,9 +1810,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "4" \
 	  --menu "Quel est votre choix" 12 62 4 \
-	  "1" "$choix3" \
-	  "2" "$choix4" \
-	  "3" "$choix5" \
+	  "1" "$choix4" \
+	  "2" "$choix5" \
+	  "3" "$choix6" \
 	  "4" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1793,12 +1884,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "7" \
 	  --menu "Quel est votre choix" 14 72 7 \
-	  "1" "$choix6" \
-	  "2" "$choix7" \
-	  "3" "$choix8" \
-	  "4" "$choix9" \
-	  "5" "$choix10" \
-	  "6" "$choix11" \
+	  "1" "$choix7" \
+	  "2" "$choix8" \
+	  "3" "$choix9" \
+	  "4" "$choix10" \
+	  "5" "$choix11" \
+	  "6" "$choix12" \
 	  "7" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1891,10 +1982,10 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "5" \
 	  --menu "Quel est votre choix" 12 52 5 \
-	  "1" "$choix12" \
-	  "2" "$choix13" \
-	  "3" "$choix14" \
-	  "4" "$choix15" \
+	  "1" "$choix13" \
+	  "2" "$choix14" \
+	  "3" "$choix15" \
+	  "4" "$choix16" \
 	  "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -1973,13 +2064,13 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --colors \
 	  --default-item "8" \
 	  --menu "Quel est votre choix" 16 62 8 \
-	  "1" "$choix16" \
-	  "2" "$choix17" \
-	  "3" "$choix18" \
-	  "4" "$choix19" \
-	  "5" "$choix20" \
-	  "6" "$choix21" \
-	  "7" "$choix22" \
+	  "1" "$choix17" \
+	  "2" "$choix18" \
+	  "3" "$choix19" \
+	  "4" "$choix20" \
+	  "5" "$choix21" \
+	  "6" "$choix22" \
+	  "7" "$choix23" \
 	  "8" "\Z4Retour\Zn" 2> $fichtemp
 
 
