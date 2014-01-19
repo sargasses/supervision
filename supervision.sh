@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 13-01-2014
+# Date : 19-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -225,6 +225,7 @@ nettoyage_table_installation()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
 
 if [ "$VAR15" = "OUI" ] ; then
 
@@ -695,7 +696,6 @@ fi
 
 inventaire_composant_logiciel()
 {
-
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
