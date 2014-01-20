@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 19-01-2014
+# Date : 20-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -17,6 +17,7 @@ DIALOG=${DIALOG=dialog}
 
 REPERTOIRE_CONFIG=/usr/local/scripts/config
 FICHIER_CENTRALISATION_INSTALLATION=config_centralisation_installation
+FICHIER_CENTRALISATION_SAUVEGARDE=config_centralisation_sauvegarde
 
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
@@ -214,6 +215,87 @@ else
 	REF14=$VAR14
 fi
 
+VAR_INSTALATION=$VAR15
+
+}
+
+
+#############################################################################
+# Fonction Lecture Fichier Configuration Gestion Centraliser Sauvegarde
+#############################################################################
+
+lecture_config_centraliser_sauvegarde()
+{
+
+if test -e $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE ; then
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	VAR=VAR$num
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE | grep $VAR=`
+	VAL2=`expr length "$VAL1"`
+	VAL3=`expr substr "$VAL1" 7 $VAL2`
+	eval VAR$num="$VAL3"
+	num=`expr $num + 1`
+	done
+
+else 
+
+mkdir -p $REPERTOIRE_CONFIG
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	echo "VAR$num=" >> $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE
+	num=`expr $num + 1`
+	done
+
+num=10
+while [ "$num" -le 15 ] 
+	do
+	VAR=VALFIC$num
+	VAL1=`cat $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE | grep $VAR=`
+	VAL2=`expr length "$VAL1"`
+	VAL3=`expr substr "$VAL1" 7 $VAL2`
+	eval VAR$num="$VAL3"
+	num=`expr $num + 1`
+	done
+
+fi
+
+if [ "$VAR10" = "" ] ; then
+	REF10=`uname -n`
+else
+	REF10=$VAR10
+fi
+
+if [ "$VAR11" = "" ] ; then
+	REF11=3306
+else
+	REF11=$VAR11
+fi
+
+if [ "$VAR12" = "" ] ; then
+	REF12=sauvegarde
+else
+	REF12=$VAR12
+fi
+
+if [ "$VAR13" = "" ] ; then
+	REF13=root
+else
+	REF13=$VAR13
+fi
+
+if [ "$VAR14" = "" ] ; then
+	REF14=directory
+else
+	REF14=$VAR14
+fi
+
+VAR_SAUVEGARDE=$VAR15
+
 }
 
 
@@ -223,6 +305,8 @@ fi
 
 nettoyage_table_installation()
 {
+
+lecture_config_centraliser_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -689,6 +773,125 @@ fi
 
 }
 
+#############################################################################
+# Fonction Nettoyage De La Base De Données Sauvegarde
+#############################################################################
+
+nettoyage_base_sauvegarde()
+{
+
+lecture_config_centraliser_sauvegarde
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+if [ "$VAR15" = "OUI" ] ; then
+
+if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
+   [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_RESEAU ] &&
+   [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP ] &&
+   [ ! -f $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE ] ; then
+
+
+	cat <<- EOF > $fichtemp
+	delete from information
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table information ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+
+
+
+	cat <<- EOF > $fichtemp
+	delete from sauvegarde_bases
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table sauvegarde_bases ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+
+
+
+	cat <<- EOF > $fichtemp
+	delete from sauvegarde_local
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table sauvegarde_local ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+
+
+
+	cat <<- EOF > $fichtemp
+	delete from sauvegarde_reseau
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table sauvegarde_reseau ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+
+
+
+	cat <<- EOF > $fichtemp
+	delete from sauvegarde_ftp
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+	rm -f $fichtemp
+
+	cat <<- EOF > $fichtemp
+	optimize table sauvegarde_ftp ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp > /dev/null
+
+	rm -f $fichtemp
+fi
+
+fi
+
+rm -f $fichtemp
+
+}
+
 
 #############################################################################
 # Fonction Inventaire Composant & Logiciel 
@@ -696,6 +899,8 @@ fi
 
 inventaire_composant_logiciel()
 {
+
+lecture_config_centraliser_installation
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -1183,7 +1388,7 @@ else
 	choix1="\Z2Gestion Centraliser des Installations\Zn"  
 fi
 
-if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION > /dev/null ; then
+if ! grep -w "OUI" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_SAUVEGARDE > /dev/null ; then
 	choix2="\Z1Gestion Centraliser des Sauvegardes\Zn" 
 else
 	choix2="\Z2Gestion Centraliser des Sauvegardes\Zn"  
@@ -1418,7 +1623,9 @@ menu()
 {
 
 lecture_config_centraliser_installation
+lecture_config_centraliser_sauvegarde
 nettoyage_table_installation
+nettoyage_base_sauvegarde
 inventaire_composant_logiciel
 verification_installation
 
@@ -1459,7 +1666,7 @@ case $valret in
 	# Installation Serveur de Supervision
 	if [ "$choix" = "3" ]
 	then
-		if [ "$VAR15" = "OUI" ] ; then
+		if [ "$VAR_INSTALATION" = "OUI" ] && [ "$VAR_SAUVEGARDE" = "OUI" ] ; then
 			rm -f $fichtemp
 			menu_installation_serveur_supervision
 		else
@@ -1509,7 +1716,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --insecure \
 	  --title "Gestion Centraliser des Installations" \
-	  --mixedform "Quel est votre choix" 11 60 0 \
+	  --mixedform "Quel est votre choix" 12 60 0 \
 	  "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
 	  "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
 	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
@@ -1585,7 +1792,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --insecure \
 	  --title "Gestion Centraliser des Sauvegardes" \
-	  --mixedform "Quel est votre choix" 11 60 0 \
+	  --mixedform "Quel est votre choix" 12 60 0 \
 	  "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
 	  "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
 	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
