@@ -19,6 +19,10 @@ REPERTOIRE_CONFIG=/usr/local/scripts/config
 FICHIER_CENTRALISATION_INSTALLATION=config_centralisation_installation
 FICHIER_CENTRALISATION_SAUVEGARDE=config_centralisation_sauvegarde
 
+REPERTOIRE_CRON=/etc/cron.d
+FICHIER_CRON_SAUVEGARDE_MySQL=sauvegarde_mysql
+FICHIER_CRON_SAUVEGARDE_CENTREON=sauvegarde_centreon
+
 NagiosLockFile=/usr/local/nagios/var/nagios.lock
 Ndo2dbPidFile=/var/run/ndo2db/ndo2db.pid
 NrpePidFile=/var/run/nrpe/nrpe.pid
@@ -786,15 +790,13 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 if [ "$VAR15" = "OUI" ] ; then
 
-if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
-   [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_RESEAU ] &&
-   [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP ] &&
-   [ ! -f $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE ] ; then
+if [ ! -f $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE_MySQL ] ||
+   [ ! -f $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE_CENTREON ] ; then
 
 
 	cat <<- EOF > $fichtemp
 	delete from information
-	where uname='`uname -n`' and application='mysql' ;
+	where uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -813,7 +815,7 @@ if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
 
 	cat <<- EOF > $fichtemp
 	delete from sauvegarde_bases
-	where uname='`uname -n`' and application='mysql' ;
+	where uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -832,7 +834,7 @@ if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
 
 	cat <<- EOF > $fichtemp
 	delete from sauvegarde_local
-	where uname='`uname -n`' and application='mysql' ;
+	where uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -851,7 +853,7 @@ if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
 
 	cat <<- EOF > $fichtemp
 	delete from sauvegarde_reseau
-	where uname='`uname -n`' and application='mysql' ;
+	where uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
@@ -870,7 +872,7 @@ if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL ] &&
 
 	cat <<- EOF > $fichtemp
 	delete from sauvegarde_ftp
-	where uname='`uname -n`' and application='mysql' ;
+	where uname='`uname -n`' ;
 	EOF
 
 	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
