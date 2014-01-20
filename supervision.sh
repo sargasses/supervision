@@ -145,6 +145,7 @@ else
 
 fi
 
+
 #############################################################################
 # Fonction Lecture Fichier Configuration Gestion Centraliser Installation
 #############################################################################
@@ -223,7 +224,6 @@ VAR_INSTALATION=$VAR15
 
 }
 
-
 #############################################################################
 # Fonction Lecture Fichier Configuration Gestion Centraliser Sauvegarde
 #############################################################################
@@ -301,7 +301,6 @@ fi
 VAR_SAUVEGARDE=$VAR15
 
 }
-
 
 #############################################################################
 # Fonction Nettoyage De La Base De Données (table inventaire)
@@ -893,7 +892,6 @@ fi
 rm -f $fichtemp
 
 }
-
 
 #############################################################################
 # Fonction Inventaire Composant & Logiciel 
