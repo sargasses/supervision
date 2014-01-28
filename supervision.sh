@@ -1427,7 +1427,7 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	  --clear \
 	  --colors \
 	  --default-item "4" \
-	  --menu "Quel est votre choix" 11 62 5 \
+	  --menu "Quel est votre choix" 11 62 4 \
 	  "1" "$choix1" \
 	  "2" "Installation Serveur de Supervision" \
 	  "3" "Quitter" 2> $fichtemp
