@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 28-01-2014
+# Date : 31-01-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5108,6 +5108,8 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
+
+	chmod -R 775 /usr/local/centreon-engine/etc
 
 (
  echo "80" ; sleep 1
