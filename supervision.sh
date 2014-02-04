@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 31-01-2014
+# Date : 04-02-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1422,15 +1422,15 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Serveur de Supervision" \
-	  --clear \
-	  --colors \
-	  --default-item "4" \
-	  --menu "Quel est votre choix" 11 62 4 \
-	  "1" "$choix1" \
-	  "2" "Installation Serveur de Supervision" \
-	  "3" "Quitter" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Serveur de Supervision" \
+	 --clear \
+	 --colors \
+	 --default-item "3" \
+	 --menu "Quel est votre choix" 11 62 4 \
+	 "1" "$choix1" \
+	 "2" "Installation Serveur de Supervision" \
+	 "3" "Quitter" 2> $fichtemp
 
 
 valret=$?
@@ -1494,15 +1494,15 @@ lecture_config_centraliser_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --insecure \
-	  --title "Gestion Centraliser des Installations" \
-	  --mixedform "Quel est votre choix" 12 60 0 \
-	  "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
-	  "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
-	  "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
-	  "Compte Root:"     4 1  "$REF13"  4 20  30 28 0  \
-	  "Password Root:"   5 1  "$REF14"  5 20  30 28 1  2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --insecure \
+	 --title "Gestion Centraliser des Installations" \
+	 --mixedform "Quel est votre choix" 12 60 0 \
+	 "Nom Serveur:"     1 1  "$REF10"  1 20  30 28 0  \
+	 "Port Serveur:"    2 1  "$REF11"  2 20  30 28 0  \
+	 "Base de Donnees:" 3 1  "$REF12"  3 20  30 28 0  \
+	 "Compte Root:"     4 1  "$REF13"  4 20  30 28 0  \
+	 "Password Root:"   5 1  "$REF14"  5 20  30 28 1  2> $fichtemp
 
 
 valret=$?
@@ -1571,17 +1571,17 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Serveur de Supervision" \
-	  --clear \
-	  --colors \
-	  --default-item "5" \
-	  --menu "Quel est votre choix" 12 62 5 \
-	  "1" "Installation Composant Complementaire" \
-	  "2" "$choix2" \
-	  "3" "Installation Suite Nagios" \
-	  "4" "Installation Suite Centreon" \
-	  "5" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Serveur de Supervision" \
+	 --clear \
+	 --colors \
+	 --default-item "5" \
+	 --menu "Quel est votre choix" 12 62 5 \
+	 "1" "Installation Composant Complementaire" \
+	 "2" "$choix2" \
+	 "3" "Installation Suite Nagios" \
+	 "4" "Installation Suite Centreon" \
+	 "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1650,15 +1650,15 @@ menu_installation_composant_complementaire()
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Complementaire" \
-	  --clear \
-	  --colors \
-	  --default-item "3" \
-	  --menu "Quel est votre choix" 10 66 3 \
-	  "1" "Installation Composant Complementaire Nagios" \
-	  "2" "Installation Composant Complementaire Centreon" \
-	  "3" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Complementaire" \
+	 --clear \
+	 --colors \
+	 --default-item "3" \
+	 --menu "Quel est votre choix" 10 66 3 \
+	 "1" "Installation Composant Complementaire Nagios" \
+	 "2" "Installation Composant Complementaire Centreon" \
+	 "3" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1716,16 +1716,16 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Complementaire Nagios" \
-	  --clear \
-	  --colors \
-	  --default-item "4" \
-	  --menu "Quel est votre choix" 12 62 4 \
-	  "1" "$choix3" \
-	  "2" "$choix4" \
-	  "3" "$choix5" \
-	  "4" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Complementaire Nagios" \
+	 --clear \
+	 --colors \
+	 --default-item "4" \
+	 --menu "Quel est votre choix" 12 62 4 \
+	 "1" "$choix3" \
+	 "2" "$choix4" \
+	 "3" "$choix5" \
+	 "4" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1790,19 +1790,19 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Complementaire Centreon" \
-	  --clear \
-	  --colors \
-	  --default-item "7" \
-	  --menu "Quel est votre choix" 14 72 7 \
-	  "1" "$choix6" \
-	  "2" "$choix7" \
-	  "3" "$choix8" \
-	  "4" "$choix9" \
-	  "5" "$choix10" \
-	  "6" "$choix11" \
-	  "7" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Complementaire Centreon" \
+	 --clear \
+	 --colors \
+	 --default-item "7" \
+	 --menu "Quel est votre choix" 14 72 7 \
+	 "1" "$choix6" \
+	 "2" "$choix7" \
+	 "3" "$choix8" \
+	 "4" "$choix9" \
+	 "5" "$choix10" \
+	 "6" "$choix11" \
+	 "7" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1888,17 +1888,17 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Suite Nagios" \
-	  --clear \
-	  --colors \
-	  --default-item "5" \
-	  --menu "Quel est votre choix" 12 52 5 \
-	  "1" "$choix12" \
-	  "2" "$choix13" \
-	  "3" "$choix14" \
-	  "4" "$choix15" \
-	  "5" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Suite Nagios" \
+	 --clear \
+	 --colors \
+	 --default-item "5" \
+	 --menu "Quel est votre choix" 12 52 5 \
+	 "1" "$choix12" \
+	 "2" "$choix13" \
+	 "3" "$choix14" \
+	 "4" "$choix15" \
+	 "5" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -1970,20 +1970,20 @@ verification_installation
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Suite Centreon" \
-	  --clear \
-	  --colors \
-	  --default-item "8" \
-	  --menu "Quel est votre choix" 16 62 8 \
-	  "1" "$choix16" \
-	  "2" "$choix17" \
-	  "3" "$choix18" \
-	  "4" "$choix19" \
-	  "5" "$choix20" \
-	  "6" "$choix21" \
-	  "7" "$choix22" \
-	  "8" "\Z4Retour\Zn" 2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Suite Centreon" \
+	 --clear \
+	 --colors \
+	 --default-item "8" \
+	 --menu "Quel est votre choix" 16 62 8 \
+	 "1" "$choix16" \
+	 "2" "$choix17" \
+	 "3" "$choix18" \
+	 "4" "$choix19" \
+	 "5" "$choix20" \
+	 "6" "$choix21" \
+	 "7" "$choix22" \
+	 "8" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -2126,9 +2126,9 @@ installation_composant_nagios_core()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Nagios" \
-	  --gauge "Installation Composant Nagios" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Nagios" \
+	 --gauge "Installation Composant Nagios" 10 62 0 \
 
 menu_installation_composant_complementaire_nagios
 }
@@ -2208,9 +2208,9 @@ installation_composant_nagios_plugins()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Nagios Plugins" \
-	  --gauge "Installation Composant Nagios Plugins" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Nagios Plugins" \
+	 --gauge "Installation Composant Nagios Plugins" 10 62 0 \
 
 menu_installation_composant_complementaire_nagios
 }
@@ -2270,9 +2270,9 @@ installation_composant_nrpe()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant NRPE" \
-	  --gauge "Installation Composant NRPE" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant NRPE" \
+	 --gauge "Installation Composant NRPE" 10 62 0 \
 
 menu_installation_composant_complementaire_nagios
 }
@@ -2328,9 +2328,9 @@ installation_composant_centreon_clib()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon Clib" \
-	  --gauge "Installation Composant Centreon Clib" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon Clib" \
+	 --gauge "Installation Composant Centreon Clib" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2382,9 +2382,9 @@ installation_composant_centreon_perl_connector()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon Perl Connector" \
-	  --gauge "Installation Composant Centreon Perl Connector" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon Perl Connector" \
+	 --gauge "Installation Composant Centreon Perl Connector" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2440,9 +2440,9 @@ installation_composant_centreon_ssh_connector()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon SSH Connector" \
-	  --gauge "Installation Composant Centreon SSH Connector" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon SSH Connector" \
+	 --gauge "Installation Composant Centreon SSH Connector" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2518,9 +2518,9 @@ installation_composant_centreon_engine()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon Engine" \
-	  --gauge "Installation Composant Centreon Engine" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon Engine" \
+	 --gauge "Installation Composant Centreon Engine" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2592,9 +2592,9 @@ installation_composant_centreon_broker()
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon Broker" \
-	  --gauge "Installation Composant Centreon Broker" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon Broker" \
+	 --gauge "Installation Composant Centreon Broker" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2694,9 +2694,9 @@ fi
  echo "XXX" ; echo "Terminer"; echo "XXX"
  sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Composant Centreon Core" \
-	  --gauge "Installation Composant Centreon Core" 10 62 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Composant Centreon Core" \
+	 --gauge "Installation Composant Centreon Core" 10 62 0 \
 
 menu_installation_composant_complementaire_centreon
 }
@@ -2713,9 +2713,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -2730,12 +2730,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -2795,9 +2795,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -2826,18 +2826,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
 
 
 	apt-get -y install smistrip	&> /dev/null
@@ -2857,9 +2857,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Installation MIB SNMP Complementaire" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -2891,9 +2891,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation MIB SNMP Complementaire" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation MIB SNMP Complementaire" \
+	 --gauge "Terminer" 10 60 0 \
 
 menu_installation_serveur_supervision
 }
@@ -2910,9 +2910,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Installation Nagios Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -2927,12 +2927,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -2992,9 +2992,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Installation Nagios Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -3035,18 +3035,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Installation Nagios Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Installation Nagios Core" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
 		groupadd -g 9000 nagios 
@@ -3079,14 +3079,14 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 if [ "$choix_version" != "3.2.3" ] ; then
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --default-item "1" \
-	  --menu "Choix de l'interface Web de Nagios" 10 40 2 \
-	  "1" "Interface Web Classique" \
-	  "2" "Interface Web Exfoliation" 2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --default-item "1" \
+	 --menu "Choix de l'interface Web de Nagios" 10 40 2 \
+	 "1" "Interface Web Classique" \
+	 "2" "Interface Web Exfoliation" 2> $fichtemp
 
 valret=$?
 choix=`cat $fichtemp`
@@ -3135,9 +3135,9 @@ fi
 (
  echo "80" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Installation Daemon Nagios en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Installation Daemon Nagios en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/nagios
 	#!/bin/sh
@@ -3236,9 +3236,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Installation Nagios Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Installation Nagios Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3270,9 +3270,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Core" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Core" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_nagios
@@ -3290,9 +3290,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --gauge "Installation Nagios Plugins" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --gauge "Installation Nagios Plugins" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3307,12 +3307,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -3372,9 +3372,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --gauge "Installation Nagios Plugins" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --gauge "Installation Nagios Plugins" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -3415,23 +3415,23 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --default-item "1" \
-	  --menu "Quel est votre choix" 10 68 2 \
-	  "1" "Installation Nagios Plugins Pour Nagios-Core" \
-	  "2" "Installation Nagios Plugins Pour Centreon-Engine" 2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --default-item "1" \
+	 --menu "Quel est votre choix" 10 68 2 \
+	 "1" "Installation Nagios Plugins Pour Nagios-Core" \
+	 "2" "Installation Nagios Plugins Pour Centreon-Engine" 2> $fichtemp
 
 valret=$?
 choix=`cat $fichtemp`
@@ -3512,9 +3512,9 @@ esac
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --gauge "Installation Nagios Plugins" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --gauge "Installation Nagios Plugins" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3546,9 +3546,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Nagios Plugins" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Nagios Plugins" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_nagios
@@ -3566,9 +3566,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Installation NDOutils" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Installation NDOutils" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3583,12 +3583,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -3648,9 +3648,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Installation NDOutils" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Installation NDOutils" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -3715,18 +3715,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Installation NDOutils" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Installation NDOutils" 10 60 0 \
 
 	if [ -f $NagiosLockFile ] ; then
 	/etc/init.d/nagios stop &> /dev/null
@@ -3740,9 +3740,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	cd $nom_repertoire
 
 
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --yesno "Installation du patch de NDOutils" 6 38  2> $fichtemp
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --yesno "Installation du patch de NDOutils" 6 38  2> $fichtemp
 
 
 valret=$?
@@ -3794,9 +3794,9 @@ esac
 (
  echo "80" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Installation Daemon NDOutils en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Installation Daemon NDOutils en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/ndo2db
 	#!/bin/sh
@@ -3891,9 +3891,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Installation NDOutils" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Installation NDOutils" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -3925,9 +3925,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NDOutils" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NDOutils" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_nagios
@@ -3945,9 +3945,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -3962,12 +3962,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Client NRPE" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Client NRPE" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -4027,9 +4027,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -4070,18 +4070,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Installation NRPE" 10 60 0 \
 
 	if ! grep -w "^nagios" /etc/passwd > /dev/null ; then
 		groupadd -g 9000 nagios 
@@ -4117,11 +4117,11 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 
 
 
-$DIALOG  --ok-label "Validation" \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --form "Quel est votre choix" 8 60 0 \
-	  "Serveur Nagios:" 1 1 "192.168.4.60"  1 17 36 0 2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --form "Quel est votre choix" 8 60 0 \
+	 "Serveur Nagios:" 1 1 "192.168.4.60"  1 17 36 0 2> $fichtemp
 
 
 valret=$?
@@ -4169,9 +4169,9 @@ esac
 (
  echo "80" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation Daemon NRPE en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Installation Daemon NRPE en cours" 10 60 0 \
 
 	cat <<- EOF > /etc/init.d/nrpe
 	#!/bin/sh
@@ -4236,9 +4236,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Installation NRPE" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Installation NRPE" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -4270,9 +4270,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation NRPE" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation NRPE" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_nagios
@@ -4290,9 +4290,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Installation Centreon Clib" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Installation Centreon Clib" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -4307,12 +4307,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -4372,9 +4372,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Installation Centreon Clib" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Installation Centreon Clib" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -4415,18 +4415,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Installation Centreon Clib" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Installation Centreon Clib" 10 60 0 \
 
 
 	tar xvzf $nom_fichier
@@ -4455,9 +4455,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Installation Centreon Clib" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Installation Centreon Clib" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -4489,9 +4489,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Clib" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Clib" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -4509,9 +4509,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Installation Centreon Perl Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -4526,12 +4526,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -4591,9 +4591,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Installation Centreon Perl Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -4634,18 +4634,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Installation Centreon Perl Connector" 10 60 0 \
 
 
 	tar xvzf $nom_fichier
@@ -4668,9 +4668,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Installation Centreon Perl Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Installation Centreon Perl Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -4702,9 +4702,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Perl Connector" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Perl Connector" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -4722,9 +4722,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Installation Centreon SSH Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -4739,12 +4739,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -4804,9 +4804,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Installation Centreon SSH Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -4847,18 +4847,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Installation Centreon SSH Connector" 10 60 0 \
 
 
 	tar xvzf $nom_fichier
@@ -4881,9 +4881,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Installation Centreon SSH Connector" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Installation Centreon SSH Connector" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -4915,9 +4915,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon SSH Connector" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon SSH Connector" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -4935,9 +4935,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Installation Centreon Engine" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Installation Centreon Engine" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -4952,12 +4952,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -5017,9 +5017,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Installation Centreon Engine" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Installation Centreon Engine" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -5060,18 +5060,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Installation Centreon Engine" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Installation Centreon Engine" 10 60 0 \
 
 
 	if ! grep -w "^centreon-engine" /etc/passwd > /dev/null ; then
@@ -5114,9 +5114,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "80" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Installation Daemon Centreon Engine en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Installation Daemon Centreon Engine en cours" 10 60 0 \
 
 	chmod 755 /etc/init.d/centengine
 
@@ -5127,9 +5127,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Installation Centreon Engine" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Installation Centreon Engine" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -5161,9 +5161,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Engine" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Engine" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -5181,9 +5181,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Centreon Broker" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Installation Centreon Broker" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -5198,12 +5198,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -5263,9 +5263,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Centreon Broker" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Installation Centreon Broker" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -5306,18 +5306,18 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Centreon Broker" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Installation Centreon Broker" 10 60 0 \
 
 
 	if ! grep -w "^centreon-broker" /etc/passwd > /dev/null ; then
@@ -5362,9 +5362,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "80" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Daemon Centreon Broker en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Installation Daemon Centreon Broker en cours" 10 60 0 \
 
 	chmod 755 /etc/init.d/cbd
 
@@ -5377,9 +5377,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Installation Centreon Broker" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Installation Centreon Broker" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -5411,9 +5411,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Broker" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Broker" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -5431,9 +5431,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Installation Centreon Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -5448,12 +5448,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 10 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 10 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -5513,9 +5513,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Installation Centreon Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -5608,9 +5608,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier &> /dev/null
 	wget --no-check-certificate -P /root/ $url_fichier_messages &> /dev/null
@@ -5619,9 +5619,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Installation Centreon Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Installation Centreon Core" 10 60 0 \
 
 
 	if ! grep -w "Centreon Admin" /etc/passwd > /dev/null ; then
@@ -5898,9 +5898,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Installation Centreon Core" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Installation Centreon Core" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -5932,9 +5932,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Core" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Core" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -5952,9 +5952,9 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 (
  echo "10" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Installation Centreon Widgets" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Installation Centreon Widgets" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select version
@@ -6002,12 +6002,12 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 	rm -f $fichtemp
 	
 
-$DIALOG  --ok-label "Validation" \
-	  --nocancel \
-	  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --form "Quel est votre choix" 10 50 1 \
-	  "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
+$DIALOG --ok-label "Validation" \
+	 --nocancel \
+	 --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --form "Quel est votre choix" 10 50 1 \
+	 "Version:"  1 1  "$version_reference"   1 10 7 0  2> $fichtemp
 
 valret=$?
 choix_version=`cat $fichtemp`
@@ -6067,9 +6067,9 @@ esac
 (
  echo "20" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Installation Centreon Widgets" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Installation Centreon Widgets" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	select url
@@ -6098,20 +6098,20 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "40" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Telechargement en cours" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Telechargement en cours" 10 60 0 \
 
 	wget --no-check-certificate -P /root/ $url_fichier --output-document=$nom_fichier &> /dev/null
 
 (
  echo "60" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Installation Centreon Widgets" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Installation Centreon Widgets" 10 60 0 \
 
-	mv centreon-widgets-1.0.0.tar.gz /usr/local/centreon/www/widgets/
+	mv $nom_fichier /usr/local/centreon/www/widgets/
 
 	cd /usr/local/centreon/www/widgets/
 	tar xvzf $nom_fichier
@@ -6121,9 +6121,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "90" ; sleep 1
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Installation Centreon Widgets" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Installation Centreon Widgets" 10 60 0 \
 
 	cat <<- EOF > $fichtemp
 	delete from inventaire
@@ -6155,9 +6155,9 @@ $DIALOG  --backtitle "Installation Serveur de Supervision" \
 (
  echo "100" ; sleep 2
 ) |
-$DIALOG  --backtitle "Installation Serveur de Supervision" \
-	  --title "Installation Centreon Widgets" \
-	  --gauge "Terminer" 10 60 0 \
+$DIALOG --backtitle "Installation Serveur de Supervision" \
+	 --title "Installation Centreon Widgets" \
+	 --gauge "Terminer" 10 60 0 \
 
 
 menu_installation_suite_centreon
@@ -6166,6 +6166,5 @@ menu_installation_suite_centreon
 #############################################################################
 # Demarrage du programme
 #############################################################################
-
 
 menu
