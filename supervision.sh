@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 04-02-2014
+# Date : 07-02-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -3773,12 +3773,9 @@ esac
 	cp ./src/ndo2db-3x /usr/local/nagios/bin/ndo2db
 	cp ./config/ndo2db.cfg-sample /usr/local/nagios/etc/ndo2db.cfg
 	cp ./config/ndomod.cfg-sample /usr/local/nagios/etc/ndomod.cfg
-
-	chmod 774 /usr/local/nagios/bin/ndo*
+	
 	chown nagios:nagios /usr/local/nagios/bin/ndo*
-
-	mkdir -p /var/run/ndo2db
-	chown -R nagios /var/run/ndo2db
+	chmod 774 /usr/local/nagios/bin/ndo*
 
 	if ! grep "lock_file=/var/run/ndo2db/ndo2db.pid" /usr/local/nagios/etc/ndo2db.cfg > /dev/null ; then
 		ligne=$(sed -n '/lock_file/=' /usr/local/nagios/etc/ndo2db.cfg)
@@ -3823,6 +3820,11 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 
 	if ! grep "^131072000" /proc/sys/kernel/msgmax > /dev/null ; then
 	echo 131072000 > /proc/sys/kernel/msgmax
+	fi
+
+	if [ ! -d /var/run/ndo2db ]; then
+		mkdir -p /var/run/ndo2db
+		chown nagios:nagios /var/run/ndo2db
 	fi
 
 	creation_fichier_pid ()
