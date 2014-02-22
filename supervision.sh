@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 07-02-2014
+# Date : 22-02-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5702,9 +5702,9 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 	if [ "$version_choix" = "2.4" ] ; then
 
 	if ! grep "innodb_file_per_table=1" /etc/mysql/my.cnf > /dev/null ; then
-	ligne=$(sed -n '/# Read the manual for more InnoDB/=' /etc/mysql/my.cnf)
-	sed -i "`expr $ligne + 1`"i"\#" /etc/mysql/my.cnf
-	sed -i "`expr $ligne + 2`"i"\innodb_file_per_table=1" /etc/mysql/my.cnf
+		ligne=$(sed -n '/# Read the manual for more InnoDB/=' /etc/mysql/my.cnf)
+		sed -i "`expr $ligne + 1`"i"\#" /etc/mysql/my.cnf
+		sed -i "`expr $ligne + 2`"i"\innodb_file_per_table=1" /etc/mysql/my.cnf
 
 	/etc/init.d/mysql restart &> /dev/null
 	fi
@@ -5792,6 +5792,99 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 
 	fi
 
+
+	if [ "$version_choix" = "2.5" ] ; then
+
+	if ! grep "innodb_file_per_table=1" /etc/mysql/my.cnf > /dev/null ; then
+		ligne=$(sed -n '/# Read the manual for more InnoDB/=' /etc/mysql/my.cnf)
+		sed -i "`expr $ligne + 1`"i"\#" /etc/mysql/my.cnf
+		sed -i "`expr $ligne + 2`"i"\innodb_file_per_table=1" /etc/mysql/my.cnf
+
+	/etc/init.d/mysql restart &> /dev/null
+	fi
+	
+	if grep "INSTALL_DIR_NAGIOS" /root/$nom_repertoire/www/install/var/engines/nagios > /dev/null ; then
+		ligne=$(sed -n '/INSTALL_DIR_NAGIOS/=' /root/$nom_repertoire/www/install/var/engines/nagios)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/nagios
+		sed -i "$ligne"i'\INSTALL_DIR_NAGIOS;Nagios directory;1;0;/usr/local/nagios' /root/$nom_repertoire/www/install/var/engines/nagios
+	fi
+
+	if grep "NAGIOSTATS_BINARY" /root/$nom_repertoire/www/install/var/engines/nagios > /dev/null ; then
+		ligne=$(sed -n '/NAGIOSTATS_BINARY/=' /root/$nom_repertoire/www/install/var/engines/nagios)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/nagios
+		sed -i "$ligne"i'\NAGIOSTATS_BINARY;Nagiostats binary;1;1;/usr/local/nagios/bin/nagiostats' /root/$nom_repertoire/www/install/var/engines/nagios
+	fi
+
+	if grep "NAGIOS_IMG" /root/$nom_repertoire/www/install/var/engines/nagios > /dev/null ; then
+		sed -i "s/usr\/share\/nagios\/html\/images/usr\/local\/nagios\/share\/images/g" /root/$nom_repertoire/www/install/var/engines/nagios
+	fi
+
+
+	if grep "INSTALL_DIR_ENGINE" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
+		ligne=$(sed -n '/INSTALL_DIR_ENGINE/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\INSTALL_DIR_ENGINE;Centreon Engine directory;1;0;/usr/local/centreon-engine' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+	fi
+
+	if grep "CENTREON_ENGINE_STATS_BINARY" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
+		ligne=$(sed -n '/CENTREON_ENGINE_STATS_BINARY/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\CENTREON_ENGINE_STATS_BINARY;Centreon Engine Stats binary;1;1;/usr/local/centreon-engine/bin/centenginestats' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+	fi
+
+	if grep "MONITORING_VAR_LIB" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
+		ligne=$(sed -n '/MONITORING_VAR_LIB/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\MONITORING_VAR_LIB;Centreon Engine var lib directory;1;0;/var/lib/centreon-engine' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+	fi
+
+	if grep "CENTREON_ENGINE_CONNECTORS" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
+		ligne=$(sed -n '/CENTREON_ENGINE_CONNECTORS/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\CENTREON_ENGINE_CONNECTOR;Centreon Engine Connector path;0;0;/usr/local/centreon-connector' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+	fi
+
+	if grep "CENTREON_ENGINE_LIB" /root/$nom_repertoire/www/install/var/engines/centreon-engine > /dev/null ; then
+		ligne=$(sed -n '/CENTREON_ENGINE_LIB/=' /root/$nom_repertoire/www/install/var/engines/centreon-engine)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/engines/centreon-engine
+		sed -i "$ligne"i'\CENTREON_ENGINE_LIB;Centreon Engine Library (*.so) directory;1;0;/usr/local/centreon-engine/lib/centreon-engine' /root/$nom_repertoire/www/install/var/engines/centreon-engine
+	fi
+
+
+	if grep "CENTREONBROKER_ETC" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
+		ligne=$(sed -n '/CENTREONBROKER_ETC/=' /root/$nom_repertoire/www/install/var/brokers/centreon-broker)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "$ligne"i'\CENTREONBROKER_ETC;Centreon Broker etc directory;1;0;/usr/local/centreon-broker/etc' /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+	fi
+
+	if grep "CENTREONBROKER_CBMOD" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
+		ligne=$(sed -n '/CENTREONBROKER_CBMOD/=' /root/$nom_repertoire/www/install/var/brokers/centreon-broker)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "$ligne"i'\CENTREONBROKER_CBMOD;Centreon Broker module (cbmod.so);0;1;/usr/local/centreon-broker/lib/cbmod.so' /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+	fi
+
+	if grep "CENTREONBROKER_LOG" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
+		ligne=$(sed -n '/CENTREONBROKER_LOG/=' /root/$nom_repertoire/www/install/var/brokers/centreon-broker)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "$ligne"i'CENTREONBROKER_LOG;Centreon Broker log directory;1;0;/var/log/centreon-broker' /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+	fi
+
+	if grep "CENTREONBROKER_VARLIB" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
+		ligne=$(sed -n '/CENTREONBROKER_VARLIB/=' /root/$nom_repertoire/www/install/var/brokers/centreon-broker)
+		sed -i ""$ligne"d" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+		sed -i "$ligne"i'CENTREONBROKER_VARLIB;Retention file directory;1;0;/var/lib/centreon-broker' /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+	fi
+
+	if grep "CENTREONBROKER_LIB" /root/$nom_repertoire/www/install/var/brokers/centreon-broker > /dev/null ; then
+		sed -i "s/usr\/share\/centreon\/lib\/centreon-broker/usr\/local\/centreon-broker\/lib\/centreon-broker/g" /root/$nom_repertoire/www/install/var/brokers/centreon-broker
+	fi
+
+
+	if grep "NDOMOD_BINARY" /root/$nom_repertoire/www/install/var/brokers/ndoutils > /dev/null ; then
+		sed -i "s/usr\/lib64\/nagios\/ndomod.o/usr\/local\/nagios\/bin\/ndomod.o/g" /root/$nom_repertoire/www/install/var/brokers/ndoutils
+	fi
+
+	fi
 
 
 	if [ -f /usr/local/nagios/bin/nagios ] ; then
