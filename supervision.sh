@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 22-02-2014
+# Date : 23-02-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -5111,6 +5111,9 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 	rm -rf /root/$nom_repertoire/
 	rm -f /root/$nom_fichier
 
+	
+	chown centreon-engine:centreon-engine  /usr/local/centreon-engine/etc
+
 	chmod -R 775 /usr/local/centreon-engine/etc
 
 (
@@ -5360,6 +5363,8 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 	chmod 775 /var/log/centreon-broker
 
 	chmod 775 /var/lib/centreon-broker
+
+	chmod 777 /usr/local/centreon-broker/etc
 
 (
  echo "80" ; sleep 1
