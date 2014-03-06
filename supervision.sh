@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 24-02-2014
+# Date : 06-03-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -140,6 +140,20 @@ else
 
 fi
 
+#############################################################################
+# Fonction Calcul du default-item Pour Nagios Plugins
+#############################################################################
+
+fonction_default_item_nagios_plugins()
+{
+
+if [ -d /usr/local/nagios ] ; then
+	default_item=1
+else
+	default_item=2
+fi
+
+}
 
 #############################################################################
 # Fonction Lecture Fichier Configuration Gestion Centraliser Installation
@@ -3285,6 +3299,8 @@ menu_installation_suite_nagios
 installation_nagios_plugins()
 {
 
+fonction_default_item_nagios_plugins
+
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 (
@@ -3428,7 +3444,7 @@ $DIALOG --ok-label "Validation" \
 	 --nocancel \
 	 --backtitle "Installation Serveur de Supervision" \
 	 --title "Installation Nagios Plugins" \
-	 --default-item "1" \
+	 --default-item "$default_item" \
 	 --menu "Quel est votre choix" 10 68 2 \
 	 "1" "Installation Nagios Plugins Pour Nagios-Core" \
 	 "2" "Installation Nagios Plugins Pour Centreon-Engine" 2> $fichtemp
@@ -5498,6 +5514,31 @@ case $valret in
 	rm -f $fichtemp
 	menu_installation_suite_centreon			
 	fi
+
+
+	version_installe_centreon_broker=`expr $version_installe_centreon_broker | sed 's/..$//'`
+	version_choix=`expr $choix_version | sed 's/..$//'`
+
+
+	if [ "$version_choix" = "2.5" ] && [ "$version_installe_centreon_broker" = "2.6" ] ; then 
+
+	cat <<- EOF > /tmp/erreur
+	Veuillez vous assurer que Centreon Broker
+	          est une version 2.5.x
+	EOF
+
+	erreur=`cat /tmp/erreur`
+
+	$DIALOG --ok-label "Quitter" \
+		 --colors \
+		 --backtitle "Installation Centreon Core" \
+		 --title "Erreur" \
+		 --msgbox  "\Z1$erreur\Zn" 6 46 
+	
+	rm -f /tmp/erreur
+	menu_installation_suite_centreon			
+	fi
+
 	;;
 
  1)	# Appuyé sur Touche CTRL C
