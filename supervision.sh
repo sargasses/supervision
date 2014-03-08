@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 06-03-2014
+# Date : 08-03-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -3515,11 +3515,13 @@ case $valret in
 
  1)	# Appuyé sur Touche CTRL C
 	echo "Appuyé sur Touche CTRL C."
+	rm -f /root/$nom_fichier
 	rm -f $fichtemp
 	;;
 
  255)	# Appuyé sur Touche Echap
 	echo "Appuyé sur Touche Echap."
+	rm -f /root/$nom_fichier
 	rm -f $fichtemp
 	;;
 
@@ -5377,7 +5379,7 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 
 	chmod 775 /var/lib/centreon-broker
 
-	chmod 777 /usr/local/centreon-broker/etc
+	chmod 775 /usr/local/centreon-broker/etc
 
 (
  echo "80" ; sleep 1
@@ -5520,11 +5522,11 @@ case $valret in
 	version_choix=`expr $choix_version | sed 's/..$//'`
 
 
-	if [ "$version_choix" = "2.5" ] && [ "$version_installe_centreon_broker" = "2.6" ] ; then 
+	if [ "$version_choix" = "2.4" ] && [ "$version_installe_centreon_broker" = "2.6" ] ; then 
 
 	cat <<- EOF > /tmp/erreur
 	Veuillez vous assurer que Centreon Broker
-	          est une version 2.5.x
+	          est une version 2.5.0
 	EOF
 
 	erreur=`cat /tmp/erreur`
