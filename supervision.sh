@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 08-03-2014
+# Date : 10-03-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -139,6 +139,7 @@ else
 	fi
 
 fi
+
 
 #############################################################################
 # Fonction Calcul du default-item Pour Nagios Plugins
@@ -1493,7 +1494,6 @@ esac
 rm -f $fichtemp
 
 exit
-
 }
 
 #############################################################################
@@ -1569,7 +1569,6 @@ esac
 rm -f $fichtemp
 
 menu
-
 }
 
 #############################################################################
