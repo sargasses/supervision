@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014
 # Développé par : Stéphane HACQUARD
-# Date : 31-03-2014
+# Date : 10-05-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1442,7 +1442,7 @@ $DIALOG --backtitle "Installation Serveur de Supervision" \
 	 --clear \
 	 --colors \
 	 --default-item "3" \
-	 --menu "Quel est votre choix" 11 62 4 \
+	 --menu "Quel est votre choix" 10 62 3 \
 	 "1" "$choix1" \
 	 "2" "Installation Serveur de Supervision" \
 	 "3" "Quitter" 2> $fichtemp
@@ -1535,19 +1535,18 @@ case $valret in
 	sed -i "s/VAR13=$VAR13/VAR13=$VARSAISI13/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 	sed -i "s/VAR14=$VAR14/VAR14=$VARSAISI14/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 
-      
+
 	cat <<- EOF > /tmp/databases.txt
-	SHOW DATABASES;
+	SHOW DATABASES ;
 	EOF
 
 	mysql -h $VARSAISI10 -P $VARSAISI11 -u $VARSAISI13 -p$VARSAISI14 < /tmp/databases.txt &>/tmp/resultat.txt
 
 	if grep -w "^$VARSAISI12" /tmp/resultat.txt > /dev/null ; then
-	sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
-
+		sed -i "s/VAR15=$VAR15/VAR15=OUI/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
 	else
-	sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
-	message_erreur
+		sed -i "s/VAR15=$VAR15/VAR15=NON/g" $REPERTOIRE_CONFIG/$FICHIER_CENTRALISATION_INSTALLATION
+		message_erreur
 	fi
 
 	rm -f /tmp/databases.txt
